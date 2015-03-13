@@ -1,0 +1,26 @@
+Assignment 2 COMP 8051
+Tim Yu-Ting Wang
+A00867804
+------------------
+Controls:
+---------
+Single finger tap: reset position
+Single finger drag: rotate camera
+Double finger drag: move camera
+Double finger tap: minimap console
+Toggle light button: turns flashlight on/off
+Toggle day/night: toggles between day/night
+Toggle fog: enable/disable fog
+Near/Far sliders: adjust near/far of fog
+
+Current State:
+--------------
+Camera movement not adjusted based on orientation of camera:
+    -movement is strictly along X and Z axis of the world
+Flashlight short ranged:
+    -the fall off for the flashlight is too steep, must get close to objects to light them
+Flashlight rotation too fast:
+    -flashlight rotations are faster than camera rotations, unsyncs from camera when rotating
+Layout is for iPad:
+    -when running on anything that isn't an iPad, buttons aren't located in the correct locations
+
