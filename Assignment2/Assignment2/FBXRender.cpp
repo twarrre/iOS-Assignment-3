@@ -74,7 +74,7 @@ void FBXRender::TraverseFBXNodes(FbxNode* node)
 {
 	// Grab the name
 	const char* nodeName = node->GetName();
-    printf("Traversing node <%s>\n", nodeName);
+    //printf("Traversing node <%s>\n", nodeName);
 	
 	// Get any transforms that could change the position
 	FbxDouble3 trans = node->LclTranslation.Get();
@@ -90,7 +90,7 @@ void FBXRender::TraverseFBXNodes(FbxNode* node)
 		if (mesh != NULL) {
 			// ========= Get the vertices from the mesh ==============
 			const char *name = mesh->GetName();
-            printf("\tChild %d = <%s>\n", i, name);
+            //printf("\tChild %d = <%s>\n", i, name);
 			int numVerts = mesh->GetControlPointsCount();
 			GLfloat* tempVerts = new GLfloat[numVerts*3];
 
@@ -169,13 +169,6 @@ void FBXRender::TraverseFBXNodes(FbxNode* node)
 
 		TraverseFBXNodes(childNode);
 	} // for
-    
-    printf("%u\n", numVertices);
-    
-    for(int i = 0; i < numVertices * 3; i++)
-    {
-        printf("%f\n", vertices[i]);
-    }
 }
 
 void FBXRender::LoadVBO(GLuint shaderPosAttr, GLuint shaderNormalAttr)

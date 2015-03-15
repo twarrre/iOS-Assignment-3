@@ -72,6 +72,11 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     GLKMatrix4 _cubeMVMatrix;
     GLKMatrix3 _cubeNormalMatrix;
     
+    // Cube matrices
+    GLKMatrix4 _fbxMVPMatrix;
+    GLKMatrix4 _fbxMVMatrix;
+    GLKMatrix3 _fbxNormalMatrix;
+    
     // Lighting parameters
     /* specify lighting parameters here...e.g., GLKVector3 flashlightPosition; */
     GLKVector3 flashlightPosition;
@@ -325,7 +330,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     
     // Initialize GL and get buffers
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
+    //glEnable(GL_CULL_FACE);
     
     glGenVertexArraysOES(1, &_vertexArray);
     glBindVertexArrayOES(_vertexArray);
@@ -792,7 +797,17 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     _cubeMVMatrix = GLKMatrix4Multiply(baseModelViewMatrix, _cubeMVMatrix);
     
     _cubeNormalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(_cubeMVMatrix), NULL);
-    _cubeMVPMatrix = GLKMatrix4Multiply(projectionMatrix, _cubeMVMatrix);  
+    _cubeMVPMatrix = GLKMatrix4Multiply(projectionMatrix, _cubeMVMatrix);
+    
+    _fbxMVMatrix = GLKMatrix4Identity;
+    _fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, _rotEnd.x, 0.0f, 1.0f, 0.0f);
+    _fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, _rotation, 0.0f, 1.0f, 0.0f);
+    _fbxMVMatrix = GLKMatrix4Scale(_fbxMVMatrix, 0.3f, 0.3f, 0.3f);
+    _fbxMVMatrix = GLKMatrix4Translate(_fbxMVMatrix, _transEnd.x + 1, 0.0f, _transEnd.y + 1);
+    _fbxMVMatrix = GLKMatrix4Multiply(baseModelViewMatrix, _fbxMVMatrix);
+    
+    _fbxNormalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(_fbxMVMatrix), NULL);
+    _fbxMVPMatrix = GLKMatrix4Multiply(projectionMatrix, _fbxMVMatrix);
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
@@ -802,7 +817,6 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     // Select VAO and shaders
-    //glBindVertexArrayOES(_vertexArray);
     glUseProgram(_program);
     
     GLKMatrix4 rotate = GLKMatrix4Rotate(GLKMatrix4Identity, _rotEnd.x, 0.0, 1.0, 0.0);
@@ -837,19 +851,28 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
         glUniform4fv(uniforms[UNIFORM_AMBIENT_COMPONENT], 1, ambientNightComponent.v);
     }
 
-    glUniform1i(uniforms[UNIFORM_X_INDEX], 0);
-    glUniform1i(uniforms[UNIFORM_Y_INDEX], 0);
+    glUniform1f(uniforms[UNIFORM_X_INDEX], 0);
+    glUniform1f(uniforms[UNIFORM_Y_INDEX], 0);
     
     glBindTexture(GL_TEXTURE_2D, crateTexture);
     glUniform1i(uniforms[UNIFORM_TEXTURE], 0);
     
     // Select VBO and draw
+    glBindVertexArrayOES(_vertexArray);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+    glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
+    
+    //Draw the fbx
+    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _fbxMVPMatrix.m);
+    glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, _fbxNormalMatrix.m);
+    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_MATRIX], 1, 0, _fbxMVMatrix.m);
+    glUniformMatrix3fv(uniforms[UNIFORM_INV_NORM], 1, 0, GLKMatrix3Invert(_fbxNormalMatrix, 0).m);
+    glUniform1f(uniforms[UNIFORM_X_INDEX], -_transEnd.x * 2);
+    glUniform1f(uniforms[UNIFORM_Y_INDEX], -_transEnd.y * 2);
+    
     glBindVertexArrayOES(_fbxVertArray);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _fbxIndexBuffer);
     glDrawElements(GL_TRIANGLES, fbxRender.numIndices, GL_UNSIGNED_INT, 0);
-    
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-    //glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
     
     // Set up uniforms
     glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _modelViewProjectionMatrix.m);
@@ -874,8 +897,8 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     {
         glUniform4fv(uniforms[UNIFORM_AMBIENT_COMPONENT], 1, ambientNightComponent.v);
     }
-    glUniform1i(uniforms[UNIFORM_X_INDEX], 0);
-    glUniform1i(uniforms[UNIFORM_Y_INDEX], 0);
+    glUniform1f(uniforms[UNIFORM_X_INDEX], 0);
+    glUniform1f(uniforms[UNIFORM_Y_INDEX], 0);
     
     //Draw Maze
     for(int x = 0; x < [mazeLevel GetWidth]; x++)
@@ -883,8 +906,8 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
         for(int y = 0; y < [mazeLevel GetLength]; y++)
         {
             glBindVertexArrayOES(_floorVertArray);
-            glUniform1i(uniforms[UNIFORM_X_INDEX], x);
-            glUniform1i(uniforms[UNIFORM_Y_INDEX], y);
+            glUniform1f(uniforms[UNIFORM_X_INDEX], x);
+            glUniform1f(uniforms[UNIFORM_Y_INDEX], y);
             glBindTexture(GL_TEXTURE_2D, crateTexture);
             glUniform1i(uniforms[UNIFORM_TEXTURE], 0);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _floorIndexBuffer);

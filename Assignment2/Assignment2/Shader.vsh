@@ -19,8 +19,8 @@ attribute vec4 position;
 attribute vec3 normal;
 attribute vec2 texCoordIn;
 
-uniform int xInd;
-uniform int yInd;
+uniform float xInd;
+uniform float yInd;
 uniform int flashLight;
 uniform int fog;
 
