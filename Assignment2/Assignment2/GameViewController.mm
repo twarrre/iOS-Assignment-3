@@ -119,7 +119,8 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     crateNoLeftTexture,
     crateNoRightTexture,
     crateLeftAndRightTexture,
-    extraTexture;
+    extraTexture,
+    fbxTexture;
     
     // GLES buffer IDs
     GLuint _vertexArray;
@@ -409,6 +410,9 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     crateLeftAndRightTexture = [self setupTexture:@"crateLeftAndRight.jpg"];
     glActiveTexture(GL_TEXTURE0);
     
+    fbxTexture = [self setupTexture:@"cubeUVTex.jpg"];
+    glActiveTexture(GL_TEXTURE0);
+    
     //////////////////////////////////////////////////////////////////////////////////////
     // Generate Maze vertices
     
@@ -687,6 +691,11 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     glEnableVertexAttribArray(GLKVertexAttribNormal);
     glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), BUFFER_OFFSET(0));
     
+    glBindBuffer(GL_ARRAY_BUFFER, _fbxVertBuffers[2]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*2*fbxRender.numUVs, fbxRender.uvs, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(GLKVertexAttribTexCoord0);
+    glVertexAttribPointer(GLKVertexAttribTexCoord0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), BUFFER_OFFSET(0));
+    
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _fbxIndexBuffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int)*fbxRender.numIndices, fbxRender.indices, GL_STATIC_DRAW);
     
@@ -944,6 +953,9 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     glUniformMatrix3fv(uniforms[UNIFORM_INV_NORM], 1, 0, GLKMatrix3Invert(_fbxNormalMatrix, 0).m);
     glUniform1f(uniforms[UNIFORM_X_INDEX], -_transEnd.x * 2);
     glUniform1f(uniforms[UNIFORM_Y_INDEX], -_transEnd.y * 2);
+    
+    glBindTexture(GL_TEXTURE_2D, fbxTexture);
+    glUniform1i(uniforms[UNIFORM_TEXTURE], 0);
     
     glBindVertexArrayOES(_fbxVertArray);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _fbxIndexBuffer);
@@ -2277,7 +2289,7 @@ int generateSphere(int numSlices, float radius, GLfloat **vertices, GLfloat **no
     // Prepare the FBX SDK.
     InitializeSdkObjects (_sdkManager, _scene) ;
     
-    NSString *modelFileName = [[NSBundle mainBundle] pathForResource:@"cube" ofType:@"fbx"];
+    NSString *modelFileName = [[NSBundle mainBundle] pathForResource:@"cubeUV" ofType:@"fbx"];
     [self LoadFBXScene:modelFileName];
 }
 
@@ -2295,10 +2307,12 @@ int generateSphere(int numSlices, float radius, GLfloat **vertices, GLfloat **no
     
     GLuint vPosition = glGetAttribLocation(_program, "vPosition");
     GLuint vNormal = glGetAttribLocation(_program, "vNormal");
+    GLuint vTexCoord = glGetAttribLocation(_program, "vTexCoord");
     glEnableVertexAttribArray(vPosition);
     glEnableVertexAttribArray(vNormal);
+    glEnableVertexAttribArray(vTexCoord);
     FbxNode *rootNode = _scene->GetRootNode();
-    fbxRender.Initialize(rootNode, vPosition, vNormal);
+    fbxRender.Initialize(rootNode, vPosition, vNormal, vTexCoord);
     
     return TRUE;
 }
