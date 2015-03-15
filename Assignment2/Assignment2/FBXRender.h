@@ -31,15 +31,17 @@ public:
     FBXRender() { initialized = false; };
     ~FBXRender() { initialized = false; };
 
-	bool Initialize(FbxNode *rootNode, GLuint shaderPosAttr, GLuint shaderNormalAttr);
+	bool Initialize(FbxNode *rootNode, GLuint shaderPosAttr, GLuint shaderNormalAttr, GLuint shaderTexCoordAttr);
 	void Purge();
 	bool Update();
 	bool Render();
     
     GLfloat *vertices;
     GLfloat *normals;
+    GLfloat *uvs;
     GLuint *indices;
-    GLuint numVertices, numNormals, numIndices;
+    GLuint *uvIndices;
+    GLuint numVertices, numNormals, numIndices, numUVs, numUVIndices;
 
 private:
     bool initialized;

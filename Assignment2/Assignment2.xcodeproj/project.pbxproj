@@ -58,6 +58,8 @@
 		A58F711B1AA234E500D739F8 /* crateNoLeft.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A58F71171AA234E500D739F8 /* crateNoLeft.jpg */; };
 		A58F711C1AA234E500D739F8 /* crateNoRight.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A58F71181AA234E500D739F8 /* crateNoRight.jpg */; };
 		A58F711D1AA234E500D739F8 /* crateNoWall.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A58F71191AA234E500D739F8 /* crateNoWall.jpg */; };
+		A599720D1AB612110062FA56 /* cubeUV.fbx in Resources */ = {isa = PBXBuildFile; fileRef = A599720C1AB612110062FA56 /* cubeUV.fbx */; };
+		A599720F1AB612220062FA56 /* cubeUVTex.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A599720E1AB612220062FA56 /* cubeUVTex.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -155,6 +157,8 @@
 		A58F71171AA234E500D739F8 /* crateNoLeft.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = crateNoLeft.jpg; sourceTree = "<group>"; };
 		A58F71181AA234E500D739F8 /* crateNoRight.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = crateNoRight.jpg; sourceTree = "<group>"; };
 		A58F71191AA234E500D739F8 /* crateNoWall.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = crateNoWall.jpg; sourceTree = "<group>"; };
+		A599720C1AB612110062FA56 /* cubeUV.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = cubeUV.fbx; sourceTree = "<group>"; };
+		A599720E1AB612220062FA56 /* cubeUVTex.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cubeUVTex.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +187,7 @@
 			isa = PBXGroup;
 			children = (
 				A58F71161AA234E500D739F8 /* crateLeftAndRight.jpg */,
+				A599720E1AB612220062FA56 /* cubeUVTex.jpg */,
 				A58F71171AA234E500D739F8 /* crateNoLeft.jpg */,
 				A58F71181AA234E500D739F8 /* crateNoRight.jpg */,
 				A58F71191AA234E500D739F8 /* crateNoWall.jpg */,
@@ -303,6 +308,7 @@
 			isa = PBXGroup;
 			children = (
 				354E06F41AB3AADD0034F63C /* cube.fbx */,
+				A599720C1AB612110062FA56 /* cubeUV.fbx */,
 				354E06F51AB3AADD0034F63C /* humanoid.fbx */,
 				354E06DF1AB396440034F63C /* cube2.fbx */,
 				354E06E01AB396440034F63C /* FBXRender.cpp */,
@@ -440,9 +446,11 @@
 				A58C6EAE1AA0CD3200373E52 /* LaunchScreen.xib in Resources */,
 				A570DE521AA7943E0038428E /* MiniMapShader.vsh in Resources */,
 				A58C6ED11AA0E3B100373E52 /* crate.jpg in Resources */,
+				A599720F1AB612220062FA56 /* cubeUVTex.jpg in Resources */,
 				A58F711B1AA234E500D739F8 /* crateNoLeft.jpg in Resources */,
 				A58C6EA91AA0CD3200373E52 /* Main.storyboard in Resources */,
 				A58C6EAB1AA0CD3200373E52 /* Images.xcassets in Resources */,
+				A599720D1AB612110062FA56 /* cubeUV.fbx in Resources */,
 				A570DE541AA794530038428E /* MiniMapShader.fsh in Resources */,
 				354E06F71AB3AADD0034F63C /* humanoid.fbx in Resources */,
 			);
@@ -619,7 +627,6 @@
 				INFOPLIST_FILE = Assignment2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = "\"/Applications/Autodesk/FBX SDK/2015.1/lib/ios-armv7/debug/libfbxsdk.a\"";
-				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = "\"/Applications/Autodesk/FBX SDK/2015.1/lib/ios-i386/debug/libfbxsdk.a\"";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				"USER_HEADER_SEARCH_PATHS[arch=*]" = "\"/Applications/Autodesk/FBX SDK/2015.1/include\"";
 			};
