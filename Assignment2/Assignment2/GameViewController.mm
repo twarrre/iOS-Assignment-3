@@ -880,15 +880,15 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     _cubeMVPMatrix = GLKMatrix4Multiply(projectionMatrix, _cubeMVMatrix);
     
     _fbxMVMatrix = GLKMatrix4Identity;
-    //_fbxMVMatrix = GLKMatrix4Scale(_fbxMVMatrix, _fbxScale, _fbxScale, _fbxScale);
-    _fbxMVMatrix = GLKMatrix4Translate(_fbxMVMatrix, _transEnd.x - _fbxTransEnd.x, _fbxTransEnd.y, _transEnd.y + 0.7f);
-    _fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, _rotEnd.x, 0.0f, 1.0f, 0.0f);
+    //_fbxMVMatrix = GLKMatrix4Translate(_fbxMVMatrix, _transEnd.x, 0.0f, _transEnd.y);
+    _fbxMVMatrix = GLKMatrix4Translate(_fbxMVMatrix, -_fbxTransEnd.x, _fbxTransEnd.y, 0.0f);
+    _fbxMVMatrix = GLKMatrix4Scale(_fbxMVMatrix, _fbxScale, _fbxScale, _fbxScale);
+    //_fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, _rotEnd.x, 0.0f, 1.0f, 0.0f);
     _fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, _fbxRotEnd.x, 0.0f, 1.0f, 0.0f);
     _fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, _fbxRotEnd.y, 1.0f, 0.0f, 0.0f);
-    _fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, _rotation, 0.0f, 1.0f, 0.0f);
-    
+    //_fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, _rotation, 0.0f, 1.0f, 0.0f);
 
-    _fbxMVMatrix = GLKMatrix4Multiply(baseModelViewMatrix, _fbxMVMatrix);
+    _fbxMVMatrix = GLKMatrix4Multiply(_modelViewMatrix, _fbxMVMatrix);
     
     _fbxNormalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(_fbxMVMatrix), NULL);
     _fbxMVPMatrix = GLKMatrix4Multiply(projectionMatrix, _fbxMVMatrix);
@@ -951,8 +951,8 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, _fbxNormalMatrix.m);
     glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_MATRIX], 1, 0, _fbxMVMatrix.m);
     glUniformMatrix3fv(uniforms[UNIFORM_INV_NORM], 1, 0, GLKMatrix3Invert(_fbxNormalMatrix, 0).m);
-    glUniform1f(uniforms[UNIFORM_X_INDEX], -_transEnd.x * 2);
-    glUniform1f(uniforms[UNIFORM_Y_INDEX], -_transEnd.y * 2);
+    glUniform1f(uniforms[UNIFORM_X_INDEX], 0);
+    glUniform1f(uniforms[UNIFORM_Y_INDEX], 0);
     
     glBindTexture(GL_TEXTURE_2D, fbxTexture);
     glUniform1i(uniforms[UNIFORM_TEXTURE], 0);
