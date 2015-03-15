@@ -163,11 +163,19 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     GLKVector2 _rotBegin;
     GLKVector2 _rotEnd;
     
+    GLKVector2 _fbxTransBegin;
+    GLKVector2 _fbxTransEnd;
+    GLKVector2 _fbxRotBegin;
+    GLKVector2 _fbxRotEnd;
+    float _fbxScale;
+    float _fbxScalePrev;
+    
     float cubeYRot;
     bool isDay;
     int isFlashLightOn;
     int isFogOn;
     bool consoleMap;
+    bool fbxMovementToggle;
     
     GLKVector3 _directVec;
     GLKVector4 mapScale;
@@ -203,6 +211,9 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     isFlashLightOn = 1;
     isFogOn = 1;
     consoleMap = NO;
+    fbxMovementToggle = YES;
+    _fbxScale = 0.1;
+ 
     
     // Set up iOS gesture recognizers
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doSingleTap:)];
@@ -229,7 +240,22 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget: self action:@selector(doTranslate:)];
     pan.minimumNumberOfTouches = 2;
+    pan.maximumNumberOfTouches = 2;
     [self.view addGestureRecognizer:pan];
+    
+    UIPanGestureRecognizer *fbxPan = [[UIPanGestureRecognizer alloc] initWithTarget: self action:@selector(doFBXPan:)];
+    fbxPan.minimumNumberOfTouches = 3;
+    fbxPan.maximumNumberOfTouches = 3;
+    [self.view addGestureRecognizer:fbxPan];
+    
+    UIPanGestureRecognizer *fbxRot = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(doRotate:)];
+    fbxRot.minimumNumberOfTouches = 4;
+    fbxRot.maximumNumberOfTouches = 4;
+    [self.view addGestureRecognizer:rotObj];
+    
+    UIPinchGestureRecognizer *pinchZoom = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(doPinch:)];
+    [self.view addGestureRecognizer:pinchZoom];
+
     
     self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     
@@ -330,7 +356,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     
     // Initialize GL and get buffers
     glEnable(GL_DEPTH_TEST);
-    //glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
     
     glGenVertexArraysOES(1, &_vertexArray);
     glBindVertexArrayOES(_vertexArray);
@@ -719,11 +745,6 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
 
 - (IBAction)doRotate:(UIPanGestureRecognizer *)recognizer
 {
-//    if (recognizer.state != UIGestureRecognizerStateEnded) {
-//        CGPoint newPt = [recognizer locationInView:self.view];
-//        yRot = (newPt.x - dragStart.x) * M_PI / 180;
-//        xRot = (newPt.y - dragStart.y) * M_PI / 180;
-//    }
     if ([recognizer state] == UIGestureRecognizerStateBegan)
     {
         _rotBegin = GLKVector2Make(0.0f, 0.0f);
@@ -752,14 +773,65 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     float dx = _transEnd.x + (x-_transBegin.x);
     float dy = _transEnd.y - (y-_transBegin.y);
     
-    //_directVec = GLKVector3Multiply(GLKVector3Make(0.0f, 0.0f, 1.0f), GLKMatrix3MakeXRotation(_rotEnd.x));
-    //dx = dx * _directVec.x;
-    //dy = dy * _directVec.y;
-        
     _transEnd = GLKVector2Make(dx, dy);
     _transBegin = GLKVector2Make(x, y);
 }
 
+- (IBAction)doFBXPan:(UIPanGestureRecognizer *) recognizer
+{
+    if ([recognizer state] == UIGestureRecognizerStateBegan)
+    {
+        if(fbxMovementToggle)
+            _fbxTransBegin = GLKVector2Make(0.0f, 0.0f);
+        else
+            _fbxRotBegin = GLKVector2Make(0.0f, 0.0f);
+    }
+    
+    CGPoint translation = [recognizer translationInView:recognizer.view];
+    float x = translation.x / recognizer.view.frame.size.width * 5.0f;
+    float y = translation.y / recognizer.view.frame.size.height * 5.0f;
+    
+    float dx = 0;
+    float dy = 0;
+    if(fbxMovementToggle)
+    {
+        dx = _fbxTransEnd.x + (x-_fbxTransBegin.x);
+        dy = _fbxTransEnd.y - (y-_fbxTransBegin.y);
+    }
+    else
+    {
+        dx = _fbxRotEnd.x + (x-_fbxRotBegin.x);
+        dy = _fbxRotEnd.y - (y-_fbxRotBegin.y);
+
+    }
+    
+    if(fbxMovementToggle)
+    {
+        _fbxTransEnd = GLKVector2Make(dx, dy);
+        _fbxTransBegin = GLKVector2Make(x, y);
+    }
+    else
+    {
+        _fbxRotEnd = GLKVector2Make(dx, dy);
+        _fbxRotBegin = GLKVector2Make(x, y);
+    }
+}
+
+-(IBAction)doPinch:(UIPinchGestureRecognizer *)recognizer
+{
+
+    if([(UIPinchGestureRecognizer*)recognizer state] == UIGestureRecognizerStateBegan)
+    {
+        _fbxScalePrev = _fbxScale;
+    }
+    
+    _fbxScale = _fbxScalePrev * recognizer.scale;
+    
+    if(_fbxScale > 1)
+        _fbxScale = 1;
+    else if(_fbxScale < 0.01)
+        _fbxScale = 0.01;
+}
 
 #pragma mark - GLKView and GLKViewController delegate methods
 
@@ -789,7 +861,6 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     _modelViewProjectionMatrix = GLKMatrix4Multiply(projectionMatrix, _modelViewMatrix);
     
     _cubeMVMatrix = GLKMatrix4Identity;
-    //_cubeMVMatrix = GLKMatrix4Translate(_cubeMVMatrix, _transEnd.x, 0.0f, _transEnd.y);
     _cubeMVMatrix = GLKMatrix4Rotate(_cubeMVMatrix, _rotEnd.x, 0.0f, 1.0f, 0.0f);
     _cubeMVMatrix = GLKMatrix4Translate(_cubeMVMatrix, _transEnd.x, 0.0f, _transEnd.y);
     _cubeMVMatrix = GLKMatrix4Rotate(_cubeMVMatrix, cubeYRot, 0.0f, 1.0f, 0.0f);
@@ -800,10 +871,14 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     _cubeMVPMatrix = GLKMatrix4Multiply(projectionMatrix, _cubeMVMatrix);
     
     _fbxMVMatrix = GLKMatrix4Identity;
+    //_fbxMVMatrix = GLKMatrix4Scale(_fbxMVMatrix, _fbxScale, _fbxScale, _fbxScale);
+    _fbxMVMatrix = GLKMatrix4Translate(_fbxMVMatrix, _transEnd.x - _fbxTransEnd.x, _fbxTransEnd.y, _transEnd.y + 0.7f);
     _fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, _rotEnd.x, 0.0f, 1.0f, 0.0f);
+    _fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, _fbxRotEnd.x, 0.0f, 1.0f, 0.0f);
+    _fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, _fbxRotEnd.y, 1.0f, 0.0f, 0.0f);
     _fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, _rotation, 0.0f, 1.0f, 0.0f);
-    _fbxMVMatrix = GLKMatrix4Scale(_fbxMVMatrix, 0.3f, 0.3f, 0.3f);
-    _fbxMVMatrix = GLKMatrix4Translate(_fbxMVMatrix, _transEnd.x + 1, 0.0f, _transEnd.y + 1);
+    
+
     _fbxMVMatrix = GLKMatrix4Multiply(baseModelViewMatrix, _fbxMVMatrix);
     
     _fbxNormalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(_fbxMVMatrix), NULL);
@@ -2190,6 +2265,11 @@ int generateSphere(int numSlices, float radius, GLfloat **vertices, GLfloat **no
     {
         isFogOn = 0;
     }
+}
+
+- (IBAction)FBXMoveToggle:(id)sender
+{
+    fbxMovementToggle = !fbxMovementToggle;
 }
 
 - (void)InitializeFBX

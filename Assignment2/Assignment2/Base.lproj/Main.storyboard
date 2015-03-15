@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BV1-FR-VrT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BV1-FR-VrT">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Game View Controller-->
@@ -16,8 +17,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lRf-Xu-lT4">
-                                <rect key="frame" x="33" y="503" width="127" height="77"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lRf-Xu-lT4">
+                                <rect key="frame" x="23" y="503" width="127" height="77"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="127" id="7e0-BO-fXe"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                 <state key="normal" title="Day/Night">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -26,18 +30,8 @@
                                     <action selector="ToggleDayNight:" destination="BV1-FR-VrT" eventType="touchUpInside" id="gfl-bJ-toM"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IL3-Ji-BBu">
-                                <rect key="frame" x="33" y="375" width="127" height="82"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
-                                <state key="normal" title="Flash Light">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="FlashLightToggle:" destination="BV1-FR-VrT" eventType="touchUpInside" id="Ecw-Dh-thR"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Xb-ml-vnm">
-                                <rect key="frame" x="33" y="20" width="127" height="85"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Xb-ml-vnm">
+                                <rect key="frame" x="23" y="-6" width="127" height="85"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <state key="normal" title="Fog Toggle">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -46,20 +40,20 @@
                                     <action selector="FogToggle:" destination="BV1-FR-VrT" eventType="touchUpInside" id="NWe-cC-bdf"/>
                                 </connections>
                             </button>
-                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.20000000000000001" minValue="0.0" maxValue="2" translatesAutoresizingMaskIntoConstraints="NO" id="K8m-IQ-ZNI">
-                                <rect key="frame" x="36" y="126" width="190" height="31"/>
+                            <slider opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.20000000000000001" minValue="0.0" maxValue="2" translatesAutoresizingMaskIntoConstraints="NO" id="K8m-IQ-ZNI">
+                                <rect key="frame" x="31" y="87" width="190" height="31"/>
                             </slider>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Near" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kwk-Tk-JbX">
-                                <rect key="frame" x="38" y="103" width="42" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Near" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kwk-Tk-JbX">
+                                <rect key="frame" x="33" y="58" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="4" minValue="2" maxValue="6" translatesAutoresizingMaskIntoConstraints="NO" id="9RV-Xw-EmF">
-                                <rect key="frame" x="37" y="203" width="189" height="31"/>
+                            <slider opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="4" minValue="2" maxValue="6" translatesAutoresizingMaskIntoConstraints="NO" id="9RV-Xw-EmF">
+                                <rect key="frame" x="31" y="140" width="189" height="31"/>
                             </slider>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Far" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2rV-gD-eYo">
-                                <rect key="frame" x="39" y="181" width="42" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Far" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2rV-gD-eYo">
+                                <rect key="frame" x="33" y="119" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -71,8 +65,52 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DOZ-jk-KHu">
+                                <rect key="frame" x="366" y="542" width="218" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="218" id="9Y9-9o-Dwd"/>
+                                </constraints>
+                                <state key="normal" title="Toggle FBX Movement/Rotation">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="FBXMoveToggle:" destination="BV1-FR-VrT" eventType="touchUpInside" id="xOn-w4-gID"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IL3-Ji-BBu">
+                                <rect key="frame" x="28" y="438" width="127" height="82"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="127" id="2K2-Ov-qyC"/>
+                                    <constraint firstAttribute="height" constant="82" id="QKW-fI-gvd"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                <state key="normal" title="Flash Light">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="FlashLightToggle:" destination="BV1-FR-VrT" eventType="touchUpInside" id="Ecw-Dh-thR"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="DOZ-jk-KHu" firstAttribute="leading" secondItem="lRf-Xu-lT4" secondAttribute="trailing" constant="216" id="2sd-T9-C0R"/>
+                            <constraint firstItem="K8m-IQ-ZNI" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="17" id="4JK-dk-AdQ"/>
+                            <constraint firstItem="lRf-Xu-lT4" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="7" id="9Ft-H5-BmF"/>
+                            <constraint firstItem="4Xb-ml-vnm" firstAttribute="top" secondItem="3se-qz-xqx" secondAttribute="topMargin" constant="-6" id="E6f-MC-SjX"/>
+                            <constraint firstItem="9RV-Xw-EmF" firstAttribute="top" secondItem="2rV-gD-eYo" secondAttribute="bottom" id="F9v-EH-h57"/>
+                            <constraint firstItem="2rV-gD-eYo" firstAttribute="top" secondItem="K8m-IQ-ZNI" secondAttribute="bottom" constant="2" id="Yc6-qR-K9T"/>
+                            <constraint firstItem="kwk-Tk-JbX" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="17" id="aRq-lQ-jd0"/>
+                            <constraint firstItem="IL3-Ji-BBu" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="12" id="bGe-vM-6IY"/>
+                            <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="lRf-Xu-lT4" secondAttribute="bottom" constant="20" id="eA8-vJ-sYt"/>
+                            <constraint firstItem="lRf-Xu-lT4" firstAttribute="top" secondItem="IL3-Ji-BBu" secondAttribute="bottom" constant="-34" id="fBf-Of-04U"/>
+                            <constraint firstItem="4Xb-ml-vnm" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="7" id="jD4-1k-MGf"/>
+                            <constraint firstItem="2rV-gD-eYo" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="17" id="m8e-2Z-7lr"/>
+                            <constraint firstItem="kwk-Tk-JbX" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="38" id="s47-Fb-zjl"/>
+                            <constraint firstItem="K8m-IQ-ZNI" firstAttribute="top" secondItem="kwk-Tk-JbX" secondAttribute="bottom" constant="8" id="uLm-bo-3ds"/>
+                            <constraint firstItem="9RV-Xw-EmF" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="17" id="ufP-yw-n6q"/>
+                            <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="DOZ-jk-KHu" secondAttribute="bottom" constant="28" id="vvV-ei-h3Q"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="DayNightToggleBtn" destination="lRf-Xu-lT4" id="Pr0-GM-hoO"/>

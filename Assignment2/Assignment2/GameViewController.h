@@ -21,4 +21,5 @@
 - (IBAction)ToggleDayNight:(id)sender;
 - (IBAction)FlashLightToggle:(id)sender;
 - (IBAction)FogToggle:(id)sender;
+- (IBAction)FBXMoveToggle:(id)sender;
 @end
