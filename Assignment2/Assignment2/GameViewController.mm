@@ -185,6 +185,11 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     FbxScene *_scene;
     FbxArray<FbxString*> animStackNameArray;
     FBXRender fbxRender;
+    
+    GLKVector3 fbxTarget;
+    GLKVector3 fbxPosition;
+    GLKVector3 heading;
+    bool isMoving;
 }
 
 @property (strong, nonatomic) EAGLContext *context;
@@ -271,6 +276,10 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     mazeLevel = [[MazeGen alloc] init];
     [mazeLevel CreateMaze];
     
+    isMoving = YES;
+    fbxTarget = GLKVector3Make(0, 0, 0);
+    fbxPosition = GLKVector3Make(0, 0, 0);
+    heading = GLKVector3Make(0, 0, 0);
     
     // Set up GL
     [self setupGL];
@@ -846,6 +855,99 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
 
 - (void)update
 {
+    if(isMoving)
+    {
+        if(abs(fbxPosition.x - fbxTarget.x) < 0.005 && abs(fbxPosition.z - fbxTarget.z) < 0.005)
+        {
+            int direction = arc4random() % 4;
+            
+            switch(direction)
+            {
+                case 0:
+                {
+                    if(![mazeLevel GetCellAt:floor(fbxPosition.x) And:floor(fbxPosition.z)][0])//North
+                    {
+                        if(floor(fbxPosition.x) == 0 &&floor(fbxPosition.z) == 0)
+                        {
+                            heading = GLKVector3Make(0, 0, 0);
+                            fbxPosition = fbxTarget;
+                            fbxTarget = GLKVector3Make(fbxPosition.x, fbxPosition.y, fbxPosition.z);
+                        }
+                        else
+                        {
+                            heading = GLKVector3Make(-0.001, 0, 0);
+                            fbxPosition = fbxTarget;
+                            fbxTarget = GLKVector3Make(fbxPosition.x - 0.5, fbxPosition.y, fbxPosition.z);
+                        }
+                    }
+                    else
+                    {
+                        heading = GLKVector3Make(0, 0, 0);
+                        fbxPosition = fbxTarget;
+                        fbxTarget = GLKVector3Make(fbxPosition.x, fbxPosition.y, fbxPosition.z);
+                    }
+                    break;
+                }
+                case 1:
+                {
+                    if(![mazeLevel GetCellAt:floor(fbxPosition.x) And:floor(fbxPosition.z)][1])//south
+                    {
+                        heading = GLKVector3Make(0.001, 0, 0);
+                        fbxPosition = fbxTarget;
+                        fbxTarget = GLKVector3Make(fbxPosition.x + 0.5, fbxPosition.y, fbxPosition.z);
+                    }
+                    else
+                    {
+                        heading = GLKVector3Make(0, 0, 0);
+                        fbxPosition = fbxTarget;
+                        fbxTarget = GLKVector3Make(fbxPosition.x, fbxPosition.y, fbxPosition.z);
+                    }
+                    break;
+                }
+                case 2:
+                {
+                    if(![mazeLevel GetCellAt:floor(fbxPosition.x) And:floor(fbxPosition.z)][2])//west
+                    {
+                        heading = GLKVector3Make(0, 0, -0.001);
+                        fbxPosition = fbxTarget;
+                        fbxTarget = GLKVector3Make(fbxPosition.x, fbxPosition.y, fbxPosition.z - 0.5);
+                    }
+                    else
+                    {
+                        heading = GLKVector3Make(0, 0, 0);
+                        fbxPosition = fbxTarget;
+                        fbxTarget = GLKVector3Make(fbxPosition.x, fbxPosition.y, fbxPosition.z);
+
+                    }
+                    break;
+                }
+                case 3:
+                {
+                    if(![mazeLevel GetCellAt:floor(fbxPosition.x) And:floor(fbxPosition.z)][3])//east
+                    {
+                        heading = GLKVector3Make(0, 0, 0.001);
+                        fbxPosition = fbxTarget;
+                        fbxTarget = GLKVector3Make(fbxPosition.x, fbxPosition.y, fbxPosition.z + 0.5);
+                    }
+                    else
+                    {
+                        heading = GLKVector3Make(0, 0, 0);
+                        fbxPosition = fbxTarget;
+                        fbxTarget = GLKVector3Make(fbxPosition.x, fbxPosition.y, fbxPosition.z);
+                    }
+                    break;
+                }
+            }
+            
+        }
+        fbxPosition = GLKVector3Make(fbxPosition.x + heading.x, fbxPosition.y + heading.y, fbxPosition.z + heading.z);
+    }
+    
+    printf("Target: %f, %f, %f\n", fbxTarget.x, fbxTarget.y, fbxTarget.z);
+    printf("Position: %f, %f, %f\n", fbxPosition.x, fbxPosition.y, fbxPosition.z);
+    //heading = GLKVector3Make(0, 0, -0.001);
+    //fbxPosition = GLKVector3Make(fbxPosition.x + heading.x, fbxPosition.y + heading.y, fbxPosition.z + heading.z);
+    
     cubeYRot += 0.005f;
     // Set up base model view matrix (place camera)
     GLKMatrix4 baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, 0.0f);
@@ -882,10 +984,11 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     _fbxMVMatrix = GLKMatrix4Identity;
     //_fbxMVMatrix = GLKMatrix4Translate(_fbxMVMatrix, _transEnd.x, 0.0f, _transEnd.y);
     _fbxMVMatrix = GLKMatrix4Translate(_fbxMVMatrix, -_fbxTransEnd.x, _fbxTransEnd.y, 0.0f);
+    _fbxMVMatrix = GLKMatrix4Translate(_fbxMVMatrix, fbxPosition.x, fbxPosition.y, fbxPosition.z);
     _fbxMVMatrix = GLKMatrix4Scale(_fbxMVMatrix, _fbxScale, _fbxScale, _fbxScale);
     //_fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, _rotEnd.x, 0.0f, 1.0f, 0.0f);
     _fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, _fbxRotEnd.x, 0.0f, 1.0f, 0.0f);
-    _fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, _fbxRotEnd.y, 1.0f, 0.0f, 0.0f);
+    _fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, -_fbxRotEnd.y, 1.0f, 0.0f, 0.0f);
     //_fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, _rotation, 0.0f, 1.0f, 0.0f);
 
     _fbxMVMatrix = GLKMatrix4Multiply(_modelViewMatrix, _fbxMVMatrix);

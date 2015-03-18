@@ -627,6 +627,7 @@
 				INFOPLIST_FILE = Assignment2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				"OTHER_LDFLAGS[sdk=iphoneos*]" = "\"/Applications/Autodesk/FBX SDK/2015.1/lib/ios-armv7/debug/libfbxsdk.a\"";
+				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = "\"/Applications/Autodesk/FBX SDK/2015.1/lib/ios-i386/debug/libfbxsdk.a\"";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				"USER_HEADER_SEARCH_PATHS[arch=*]" = "\"/Applications/Autodesk/FBX SDK/2015.1/include\"";
 			};
