@@ -294,8 +294,8 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     [mazeLevel CreateMaze];
     
     isMoving = YES;
-    fbxTarget = GLKVector3Make(0, 0, 0);
-    fbxPosition = GLKVector3Make(0, 0, 0);
+    fbxTarget = GLKVector3Make(0, -0.25f, 0);
+    fbxPosition = GLKVector3Make(0, -0.25f, 0);
     heading = GLKVector3Make(0, 0, 0);
     
     // Set up GL
@@ -1351,13 +1351,13 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
         glDrawElements(GL_TRIANGLES, enemyMapNumIndices, GL_UNSIGNED_INT, 0);
         
         //draw enemy target
-        glUniform4fv(mmUniforms[MM_UNIFORM_COLOR], 1, GLKVector4Make(0.0f, 1.0f, 0.0f, 0.75f).v);
+        /*glUniform4fv(mmUniforms[MM_UNIFORM_COLOR], 1, GLKVector4Make(0.0f, 1.0f, 0.0f, 0.75f).v);
         glBindVertexArrayOES(_enemyMapVertArray);
         glUniform1f(mmUniforms[MM_UNIFORM_X_INDEX], fbxTarget.x * 2);
         glUniform1f(mmUniforms[MM_UNIFORM_Y_INDEX], fbxTarget     .z * 2);
         glUniformMatrix4fv(mmUniforms[MM_UNIFORM_ORIENT], 1, 0, GLKMatrix4Rotate(GLKMatrix4Identity, -fbxOrientation, 0.0, 0.0, 1.0).m);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _enemyMapIndexBuffer);
-        glDrawElements(GL_TRIANGLES, enemyMapNumIndices, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, enemyMapNumIndices, GL_UNSIGNED_INT, 0);*/
         
         glUniform1i(mmUniforms[MM_UNIFORM_X_INDEX], 0);
         glUniform1i(mmUniforms[MM_UNIFORM_Y_INDEX], 0);
