@@ -14,6 +14,8 @@
 #include "FBXRender.h"
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
+#define MODELNAME @"Chicken_PT"
+#define TEXTURENAME @"chicken_diffuse.tga"
 
 // Shader uniform indices
 enum
@@ -21,7 +23,6 @@ enum
     UNIFORM_MODELVIEWPROJECTION_MATRIX,
     UNIFORM_NORMAL_MATRIX,
     UNIFORM_MODELVIEW_MATRIX,
-    /* more uniforms needed here... */
     UNIFORM_TEXTURE,
     UNIFORM_FLASHLIGHT_POSITION,
     UNIFORM_DIFFUSE_LIGHT_POSITION,
@@ -281,7 +282,6 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     UIPinchGestureRecognizer *pinchZoom = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(doPinch:)];
     [self.view addGestureRecognizer:pinchZoom];
 
-    
     self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     
     if (!self.context) {
@@ -438,7 +438,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     crateLeftAndRightTexture = [self setupTexture:@"crateLeftAndRight.jpg"];
     glActiveTexture(GL_TEXTURE0);
     
-    fbxTexture = [self setupTexture:@"chicken_diffuse.jpg"];
+    fbxTexture = [self setupTexture:TEXTURENAME];
     glActiveTexture(GL_TEXTURE0);
     
     //////////////////////////////////////////////////////////////////////////////////////
@@ -2655,7 +2655,7 @@ int generateSphere(int numSlices, float radius, GLfloat **vertices, GLfloat **no
     // Prepare the FBX SDK.
     InitializeSdkObjects (_sdkManager, _scene) ;
     
-    NSString *modelFileName = [[NSBundle mainBundle] pathForResource:@"Chicken_PT" ofType:@"fbx"];
+    NSString *modelFileName = [[NSBundle mainBundle] pathForResource:MODELNAME ofType:@"fbx"];
     [self LoadFBXScene:modelFileName];
 }
 

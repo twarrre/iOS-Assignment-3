@@ -1,6 +1,8 @@
-Assignment 2 COMP 8051
+Assignment 3 COMP 8051
 Tim Yu-Ting Wang
 A00867804
+Trevor Ware
+A00844405
 ------------------
 Controls:
 ---------
@@ -12,6 +14,22 @@ Toggle light button: turns flashlight on/off
 Toggle day/night: toggles between day/night
 Toggle fog: enable/disable fog
 Near/Far sliders: adjust near/far of fog
+
+Three finger tap: toggle enemy ai movement
+Pinch: zoom the enemy, when not moving
+Three finger drag up/down: pan in y direction / z direction / rotate the enemy
+Three finger drag left/right:  pan in x direction / rotate the enemy
+**Three finger gestures are kinda finicky**
+Toggle FBX Direction Movement: toggles between three finger drag gestures controlling the xy or z movements
+Toggle FBX Movement Rotation: Toggles whether three finger drag rotates or moves the enemy
+Reset Enemy: Resets the enemy to default positions and orientation
+
+Can only manipulate the enemy when it is stopped and you are roughly in the same cell as it
+Scaling is capped
+Panning in the x and z directions are capped to the width and length of the cell
+There are definitions as the top to change the model and texture called MODELNAME and TEXTURENAME
+
+Texture can be a jpg or tga
 
 Current State:
 --------------
