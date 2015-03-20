@@ -23,6 +23,7 @@
 - (IBAction)FogToggle:(id)sender;
 - (IBAction)FBXMoveToggle:(id)sender;
 - (IBAction)FBXZMovementToggle:(id)sender;
+- (IBAction)ResetEnemy:(id)sender;
 @property (strong, nonatomic) IBOutlet UILabel *FBXRotationMovementToggleLabel;
 @property (strong, nonatomic) IBOutlet UILabel *FBXZMovementToggleLabel;
 @end
