@@ -101,7 +101,8 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
         *southVertices, *southNormals, *southTexCoords,
         *westVertices, *westNormals, *westTexCoords,
         *eastVertices, *eastNormals, *eastTexCoords,
-        *fbxVertices, *fbxNormals;
+        *fbxVertices, *fbxNormals,
+        *enemyMapVertices, *enemyMapNormals, *enemyMapTexCoords;
     
     GLuint numIndices, *indices,
         playerNumIndices, *playerIndices,
@@ -111,7 +112,8 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
         southNumIndices, *southIndices,
         westNumIndices, *westIndices,
         eastNumIndices, *eastIndices,
-    fbxNumIndices, *fbxIndices;
+        fbxNumIndices, *fbxIndices,
+        enemyMapNumIndices, *enemyMapIndices;
     
     /* texture parameters ??? */
     GLuint crateTexture,
@@ -126,6 +128,10 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     GLuint _vertexArray;
     GLuint _vertexBuffers[3];
     GLuint _indexBuffer;
+    
+    GLuint _enemyMapVertArray;
+    GLuint _enemyMapVertBuffers[3];
+    GLuint _enemyMapIndexBuffer;
     
     GLuint _playerVertArray;
     GLuint _playerVertBuffers[3];
@@ -421,6 +427,45 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     
     fbxTexture = [self setupTexture:@"crate.jpg"];
     glActiveTexture(GL_TEXTURE0);
+    
+    //////////////////////////////////////////////////////////////////////////////////////
+    // Generate Enemy MiniMap vertices
+    
+    glGenVertexArraysOES(1, &_enemyMapVertArray);
+    glBindVertexArrayOES(_enemyMapVertArray);
+    
+    glGenBuffers(3, _enemyMapVertBuffers);
+    glGenBuffers(1, &_enemyMapIndexBuffer);
+    
+    //
+    // Generate vertices
+    //
+    // Player
+    int enemyMapNumVerts;
+    //numIndices = generateSphere(50, 1, &vertices, &normals, &texCoords, &indices, &numVerts);
+    enemyMapNumIndices = generateEnemy(1, &enemyMapVertices, &enemyMapNormals, &enemyMapTexCoords, &enemyMapIndices, &enemyMapNumVerts);
+    
+    // Set up GL buffers
+    glBindBuffer(GL_ARRAY_BUFFER, _enemyMapVertBuffers[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*3*enemyMapNumVerts, enemyMapVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(GLKVertexAttribPosition);
+    glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), BUFFER_OFFSET(0));
+    
+    glBindBuffer(GL_ARRAY_BUFFER, _enemyMapVertBuffers[1]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*3*enemyMapNumVerts, enemyMapNormals, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(GLKVertexAttribNormal);
+    glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), BUFFER_OFFSET(0));
+    
+    glBindBuffer(GL_ARRAY_BUFFER, _enemyMapVertBuffers[2]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*3*enemyMapNumVerts, enemyMapTexCoords, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(GLKVertexAttribTexCoord0);
+    glVertexAttribPointer(GLKVertexAttribTexCoord0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), BUFFER_OFFSET(0));
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _enemyMapIndexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int)*enemyMapNumIndices, enemyMapIndices, GL_STATIC_DRAW);
+    
+    glBindVertexArrayOES(0);
+
     
     //////////////////////////////////////////////////////////////////////////////////////
     // Generate Maze vertices
@@ -1223,16 +1268,25 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
         // Set up uniforms
         glUseProgram(_mmProgram);
         
-
+        //draw player
         glUniformMatrix4fv(mmUniforms[MM_UNIFORM_ROT], 1, 0, mapRot.m);
         glUniform4fv(mmUniforms[MM_UNIFORM_SCALE], 1, mapScale.v);
-        glUniform4fv(mmUniforms[MM_UNIFORM_COLOR], 1, GLKVector4Make(1.0f, 0.0f, 0.0f, 0.75f).v);
+        glUniform4fv(mmUniforms[MM_UNIFORM_COLOR], 1, GLKVector4Make(0.0f, 0.0f, 1.0f, 0.75f).v);
         glBindVertexArrayOES(_playerVertArray);
         glUniform1f(mmUniforms[MM_UNIFORM_X_INDEX], -_transEnd.x * 2);
         glUniform1f(mmUniforms[MM_UNIFORM_Y_INDEX], -_transEnd.y * 2);
         glUniformMatrix4fv(mmUniforms[MM_UNIFORM_ORIENT], 1, 0, GLKMatrix4Rotate(GLKMatrix4Identity, -_rotEnd.x + M_PI, 0.0, 0.0, 1.0).m);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _playerIndexBuffer);
         glDrawElements(GL_TRIANGLES, playerNumIndices, GL_UNSIGNED_INT, 0);
+        
+        //draw enemy
+        glUniform4fv(mmUniforms[MM_UNIFORM_COLOR], 1, GLKVector4Make(1.0f, 0.0f, 0.0f, 0.75f).v);
+        glBindVertexArrayOES(_enemyMapVertArray);
+        glUniform1f(mmUniforms[MM_UNIFORM_X_INDEX], fbxPosition.x * 2);
+        glUniform1f(mmUniforms[MM_UNIFORM_Y_INDEX], fbxPosition.z * 2);
+        glUniformMatrix4fv(mmUniforms[MM_UNIFORM_ORIENT], 1, 0, GLKMatrix4Rotate(GLKMatrix4Identity, -_rotEnd.x + M_PI, 0.0, 0.0, 1.0).m);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _enemyMapIndexBuffer);
+        glDrawElements(GL_TRIANGLES, enemyMapNumIndices, GL_UNSIGNED_INT, 0);
         
         glUniform1i(mmUniforms[MM_UNIFORM_X_INDEX], 0);
         glUniform1i(mmUniforms[MM_UNIFORM_Y_INDEX], 0);
@@ -1618,6 +1672,91 @@ int generatePlayer(float scale, GLfloat **vertices, GLfloat **normals,
         *numVerts = numVertices;
     return numIndices;
 }
+
+
+int generateEnemy(float scale, GLfloat **vertices, GLfloat **normals,
+                   GLfloat **texCoords, GLuint **indices, int *numVerts)
+{
+    int i;
+    int numVertices = 4;
+    int numIndices = 6;
+    GLfloat floorVerts[] =
+    {
+        -0.0f, -0.5f, 0.25f,
+        -0.25f, -0.5f,  -0.0f,
+        0.25f, -0.5f,  -0.0f,
+        0.0f, -0.5f, -0.25f,
+        
+        //-0.5f, -0.5f, -0.5f,
+        //-0.5f, -0.5f,  0.5f,
+        //0.5f, -0.5f,  0.5f,
+        //0.5f, -0.5f, -0.5f,
+    };
+    
+    GLfloat floorNormals[] =
+    {
+        0.0f, 1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+    };
+    
+    GLfloat floorTex[] =
+    {
+        /*
+         0.0f, 0.0f,
+         0.0f, 1.0f,
+         1.0f, 1.0f,
+         1.0f, 0.0f,*/
+        1.0f, 1.0f,
+        1.0f, 0.0f,
+        0.0f, 0.0f,
+        0.0f, 1.0f,
+        
+    };
+    // Allocate memory for buffers
+    if ( vertices != NULL )
+    {
+        *vertices = (float*)malloc ( sizeof ( GLfloat ) * 3 * numVertices );
+        memcpy ( *vertices, floorVerts, sizeof ( floorVerts ) );
+        
+        for ( i = 0; i < numVertices * 3; i++ )
+        {
+            ( *vertices ) [i] *= scale;
+        }
+    }
+    
+    if ( normals != NULL )
+    {
+        *normals = (float*)malloc ( sizeof ( GLfloat ) * 3 * numVertices );
+        memcpy ( *normals, floorNormals, sizeof ( floorNormals ) );
+    }
+    
+    if ( texCoords != NULL )
+    {
+        *texCoords = (float*)malloc ( sizeof ( GLfloat ) * 2 * numVertices );
+        memcpy ( *texCoords, floorTex, sizeof ( floorTex ) ) ;
+    }
+    
+    
+    // Generate the indices
+    if ( indices != NULL )
+    {
+        GLuint cubeIndices[] =
+        {
+            0, 2, 1,
+            3, 1, 2,
+        };
+        
+        *indices = (GLuint*)malloc ( sizeof ( GLuint ) * numIndices );
+        memcpy ( *indices, cubeIndices, sizeof ( cubeIndices ) );
+    }
+    
+    if (numVerts != NULL)
+        *numVerts = numVertices;
+    return numIndices;
+}
+
 
 
 int generateFloor(float scale, GLfloat **vertices, GLfloat **normals,
