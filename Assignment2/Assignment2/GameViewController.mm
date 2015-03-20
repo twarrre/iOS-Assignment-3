@@ -432,7 +432,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     crateLeftAndRightTexture = [self setupTexture:@"crateLeftAndRight.jpg"];
     glActiveTexture(GL_TEXTURE0);
     
-    fbxTexture = [self setupTexture:@"crate.jpg"];
+    fbxTexture = [self setupTexture:@"chicken_diffuse.jpg"];
     glActiveTexture(GL_TEXTURE0);
     
     //////////////////////////////////////////////////////////////////////////////////////
@@ -1130,8 +1130,9 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     glUniform1i(uniforms[UNIFORM_TEXTURE], 0);
     
     glBindVertexArrayOES(_fbxVertArray);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _fbxIndexBuffer);
-    glDrawElements(GL_TRIANGLES, fbxRender.numIndices, GL_UNSIGNED_INT, 0);
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _fbxIndexBuffer);
+    //glDrawElements(GL_TRIANGLES, fbxRender.numIndices, GL_UNSIGNED_INT, 0);
+    glDrawArrays(GL_TRIANGLES, 0, fbxRender.numVertices);
     
     // Set up uniforms
     glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _modelViewProjectionMatrix.m);

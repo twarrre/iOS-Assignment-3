@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////
 //
 //  FBXRender
 //
@@ -94,57 +94,26 @@ void FBXRender::TraverseFBXNodes(FbxNode* node)
 			// ========= Get the vertices from the mesh ==============
 			const char *name = mesh->GetName();
             //printf("\tChild %d = <%s>\n", i, name);
-			int numVerts = mesh->GetControlPointsCount();
-			GLfloat* tempVerts = new GLfloat[numVerts*3];
-
-			for (int j = 0; j < numVerts; j++) {
-				FbxVector4 coord = mesh->GetControlPointAt(j);
+            
+            // ========= Get the indices from the mesh ===============
+            numIndices = mesh->GetPolygonVertexCount();
+            indices = (GLuint *)mesh->GetPolygonVertices();
+            
+			//int numVerts = mesh->GetControlPointsCount();
+            //int numPoly = mesh->GetPolygonCount();
+			GLfloat* tempVerts = new GLfloat[numIndices * 3];
+            int index = 0;
+			for (int j = 0; j < numIndices; j++) {
+				FbxVector4 coord = mesh->GetControlPointAt(indices[j]);
 				tempVerts[j*3+0] = (GLfloat)coord.mData[0];
 				tempVerts[j*3+1] = (GLfloat)coord.mData[1];
 				tempVerts[j*3+2] = (GLfloat)coord.mData[2];
-				if (!meshExtents.xInit)
-				{
-					meshExtents.xMin = meshExtents.xMax = tempVerts[j*3+0];
-					meshExtents.xInit = true;
-				}
-				else
-				{
-					if (meshExtents.xMin > tempVerts[j*3+0])
-						meshExtents.xMin = tempVerts[j*3+0];
-					if (meshExtents.xMax < tempVerts[j*3+0])
-						meshExtents.xMax = tempVerts[j*3+0];
-				}
-				if (!meshExtents.yInit)
-				{
-					meshExtents.yMin = meshExtents.yMax = tempVerts[j*3+1];
-					meshExtents.yInit = true;
-				}
-				else
-				{
-					if (meshExtents.yMin > tempVerts[j*3+1])
-						meshExtents.yMin = tempVerts[j*3+1];
-					if (meshExtents.yMax < tempVerts[j*3+1])
-						meshExtents.yMax = tempVerts[j*3+1];
-				}
-				if (!meshExtents.zInit)
-				{
-					meshExtents.zMin = meshExtents.zMax = tempVerts[j*3+2];
-					meshExtents.zInit = true;
-				}
-				else
-				{
-					if (meshExtents.zMin > tempVerts[j*3+2])
-						meshExtents.zMin = tempVerts[j*3+2];
-					if (meshExtents.zMax < tempVerts[j*3+2])
-						meshExtents.zMax = tempVerts[j*3+2];
-				}
+                //index++;
 			}
 			vertices = tempVerts;
-			numVertices = numVerts;
+			numVertices = numIndices;
 			
-			// ========= Get the indices from the mesh ===============
-			numIndices = mesh->GetPolygonVertexCount();
-			indices = (GLuint *)mesh->GetPolygonVertices();
+
 
 			// ========= Get the normals from the mesh ===============
 			FbxGeometryElementNormal* normalElement = mesh->GetElementNormal();
@@ -174,18 +143,20 @@ void FBXRender::TraverseFBXNodes(FbxNode* node)
             if(uvElement)
             {
                 numUVs = mesh->GetPolygonCount()*3;
-                GLfloat* tempUVs = new GLfloat[numUVs * 3];
+                GLfloat* tempUVs = new GLfloat[numUVs * 2];
                 int vertexCounter = 0;
                 
                 for(int polyCounter = 0; polyCounter < mesh->GetPolygonCount(); polyCounter++)
                 {
+                    int sInd = mesh->GetPolygonVertexIndex(polyCounter);
                     for(int i = 0; i < 3; i++)
                     {
-                        int uvIndex = mesh->GetTextureUVIndex(polyCounter, polyCounter + i);
+                        int uvIndex = mesh->GetTextureUVIndex(polyCounter, i);
                         FbxVector2 uv = uvElement->GetDirectArray().GetAt(uvIndex);
-                        tempUVs[vertexCounter*2+0] = uv[0];
-                        tempUVs[vertexCounter*2+1] = uv[1];
+                        tempUVs[(sInd + i) * 2] = uv[0];
+                        tempUVs[(sInd + i) * 2 + 1] = uv[1] * -1;
                         //tempUVs[vertexCounter*3+2] = uv[2];
+                        printf("%d\n", sInd + i);
                         
                         printf("%f\n", uv[0]);
                         printf("%f\n", uv[1]);
