@@ -157,8 +157,8 @@
 		A599720E1AB612220062FA56 /* cubeUVTex.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cubeUVTex.jpg; sourceTree = "<group>"; };
 		A5C6852A1ABB9CE80017AF2E /* chicken_diffuse.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = chicken_diffuse.tga; sourceTree = "<group>"; };
 		A5C6852B1ABB9CE80017AF2E /* chicken_diffuse.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = chicken_diffuse.jpg; sourceTree = "<group>"; };
-		A5C6852E1ABB9CF10017AF2E /* Chicken_PT.fbx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Chicken_PT.fbx; sourceTree = "<group>"; };
-		A5C6852F1ABB9CF10017AF2E /* Chicken_BN.fbx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Chicken_BN.fbx; sourceTree = "<group>"; };
+		A5C6852E1ABB9CF10017AF2E /* Chicken_PT.fbx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Chicken_PT.fbx; path = Assignment2/Chicken_PT.fbx; sourceTree = "<group>"; };
+		A5C6852F1ABB9CF10017AF2E /* Chicken_BN.fbx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Chicken_BN.fbx; path = Assignment2/Chicken_BN.fbx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +183,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3505CD6B1ABCE08E0057E510 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A5C6852E1ABB9CF10017AF2E /* Chicken_PT.fbx */,
+				A5C6852F1ABB9CF10017AF2E /* Chicken_BN.fbx */,
+			);
+			name = Models;
+			path = ..;
+			sourceTree = "<group>";
+		};
 		354E06951AB3947D0034F63C /* Textures */ = {
 			isa = PBXGroup;
 			children = (
@@ -309,14 +319,13 @@
 		A58C6E981AA0CD3200373E52 /* Assignment2 */ = {
 			isa = PBXGroup;
 			children = (
-				A5C6852E1ABB9CF10017AF2E /* Chicken_PT.fbx */,
-				A5C6852F1ABB9CF10017AF2E /* Chicken_BN.fbx */,
 				354E06E01AB396440034F63C /* FBXRender.cpp */,
 				354E06E11AB396440034F63C /* FBXRender.h */,
 				354E06DE1AB396260034F63C /* Controllers */,
 				354E06981AB395C60034F63C /* FBX */,
 				354E06971AB394AA0034F63C /* Shaders */,
 				354E06961AB3948D0034F63C /* Maze */,
+				3505CD6B1ABCE08E0057E510 /* Models */,
 				354E06951AB3947D0034F63C /* Textures */,
 				A58C6E9D1AA0CD3200373E52 /* AppDelegate.h */,
 				A58C6E9E1AA0CD3200373E52 /* AppDelegate.m */,

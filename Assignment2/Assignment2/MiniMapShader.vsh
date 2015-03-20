@@ -9,8 +9,6 @@
 precision mediump float;
 
 attribute vec4 position;
-attribute vec3 normal;
-attribute vec2 texCoordIn;
 
 uniform vec4 VertCol;
 varying vec4 Color;

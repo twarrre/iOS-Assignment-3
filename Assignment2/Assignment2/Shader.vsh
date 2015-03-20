@@ -38,14 +38,14 @@ uniform mat3 normalMatrix;
 uniform float far;
 uniform float near;
 
-varying mat3 normMat;
+//varying mat3 normMat;
 uniform mat3 invNormMat;
 
 void main()
 {
     spotDirVar = spotDirection;
     spotCutoffVar = spotCutoff;
-    normMat = normalMatrix;
+    //normMat = normalMatrix;
     
     vec4 index = vec4(xInd, 0, yInd, 1);
     vec4 newPosition = position + index;

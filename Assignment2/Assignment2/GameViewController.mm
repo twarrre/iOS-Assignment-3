@@ -1546,8 +1546,6 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     // Bind attribute locations.
     // This needs to be done prior to linking.
     glBindAttribLocation(_mmProgram, GLKVertexAttribPosition, "position");
-    glBindAttribLocation(_mmProgram, GLKVertexAttribNormal, "normal");
-    glBindAttribLocation(_mmProgram, GLKVertexAttribTexCoord0, "texCoordIn");
     
     // Link program.
     if (![self linkProgram:_mmProgram]) {
@@ -2636,7 +2634,7 @@ int generateSphere(int numSlices, float radius, GLfloat **vertices, GLfloat **no
     if(fbxMovementToggle)
         [_FBXRotationMovementToggleLabel setText:@"FBX Movement Selected"];
     else
-        [_FBXRotationMovementToggleLabel setText:@"FBX Rotation Rotation"];
+        [_FBXRotationMovementToggleLabel setText:@"FBX Rotation Selected"];
 }
 
 - (IBAction)FBXZMovementToggle:(id)sender
@@ -2646,7 +2644,7 @@ int generateSphere(int numSlices, float radius, GLfloat **vertices, GLfloat **no
     if(fbxZToggle)
         [_FBXZMovementToggleLabel setText:@"FBX Z Movement Selected"];
     else
-        [_FBXZMovementToggleLabel setText:@"FBX XY Movement Rotation"];
+        [_FBXZMovementToggleLabel setText:@"FBX XY Movement Selected"];
 
 }
 

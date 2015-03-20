@@ -17,10 +17,8 @@ varying vec2 texCoordOut;
 varying vec3 flashLightOn;
 varying vec3 fogOn;
 varying float fogFactor;
-/* set up a uniform sampler2D to get texture */
 uniform sampler2D texture;
 
-/* set up uniforms for lighting parameters */
 uniform vec3 flashlightPosition;
 uniform vec3 diffuseLightPosition;
 uniform vec4 diffuseComponent;

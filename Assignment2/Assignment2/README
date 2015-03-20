@@ -31,6 +31,9 @@ There are definitions as the top to change the model and texture called MODELNAM
 
 Texture can be a jpg or tga
 
+Enemy is a red diamond on the mini map
+Player is a blue triangle on the minimap
+
 Current State:
 --------------
 Camera movement not adjusted based on orientation of camera:

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BV1-FR-VrT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BV1-FR-VrT">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -144,8 +144,12 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5nF-WY-Uqh">
-                                <rect key="frame" x="164" y="301" width="112" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5nF-WY-Uqh">
+                                <rect key="frame" x="488" y="456" width="112" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="EOg-dG-bSv"/>
+                                    <constraint firstAttribute="width" constant="112" id="b4w-f2-BRz"/>
+                                </constraints>
                                 <state key="normal" title="Reset Enemy">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -168,6 +172,8 @@
                             <constraint firstItem="2rV-gD-eYo" firstAttribute="top" secondItem="K8m-IQ-ZNI" secondAttribute="bottom" constant="8" id="CUL-BK-1kg"/>
                             <constraint firstItem="DOZ-jk-KHu" firstAttribute="top" secondItem="T3u-s4-aic" secondAttribute="bottom" constant="18" id="EFB-uT-Lfm"/>
                             <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="DOZ-jk-KHu" secondAttribute="bottom" constant="28" id="HcI-uX-kSi"/>
+                            <constraint firstItem="T3u-s4-aic" firstAttribute="top" secondItem="5nF-WY-Uqh" secondAttribute="bottom" constant="8" id="Lop-Ry-gGQ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="5nF-WY-Uqh" secondAttribute="trailing" constant="-16" id="OyM-zY-PfA"/>
                             <constraint firstItem="3Bw-rV-2Sd" firstAttribute="trailing" secondItem="3se-qz-xqx" secondAttribute="trailingMargin" id="SCv-La-wb0"/>
                             <constraint firstItem="ao8-Vt-G7r" firstAttribute="trailing" secondItem="3se-qz-xqx" secondAttribute="trailingMargin" id="T9H-Wm-Po2"/>
                             <constraint firstItem="K8m-IQ-ZNI" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="13" id="YGT-LP-Hkl"/>
