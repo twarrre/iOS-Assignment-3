@@ -954,7 +954,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
                 case 0:
                 {
                     fbxOrientation = 270 * M_PI / 180;
-                    if(![mazeLevel GetCellAt:fbxPosition.x And:fbxPosition.z][0])//North
+                    if(![mazeLevel GetCellAt:(fbxPosition.x * 2) And:(fbxPosition.z * 2)][0])//North
                     {
                             heading = GLKVector3Make(-0.005, 0, 0);
                             fbxPosition = fbxTarget;
@@ -971,7 +971,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
                 case 1:
                 {
                     fbxOrientation = 90 * M_PI / 180;
-                    if(![mazeLevel GetCellAt:fbxPosition.x And:fbxPosition.z][1])//south
+                    if(![mazeLevel GetCellAt:(fbxPosition.x * 2) And:(fbxPosition.z * 2)][1])//south
                     {
                         heading = GLKVector3Make(0.005, 0, 0);
                         fbxPosition = fbxTarget;
@@ -988,7 +988,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
                 case 2:
                 {
                     fbxOrientation = 180 * M_PI / 180;
-                    if(![mazeLevel GetCellAt:fbxPosition.x And:fbxPosition.z][2])//west
+                    if(![mazeLevel GetCellAt:(fbxPosition.x * 2) And:(fbxPosition.z * 2)][2])//west
                     {
                         heading = GLKVector3Make(0, 0, -0.005);
                         fbxPosition = fbxTarget;
@@ -1006,7 +1006,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
                 case 3:
                 {
                     fbxOrientation = 0 * M_PI / 180;
-                    if(![mazeLevel GetCellAt:fbxPosition.x And:fbxPosition.z][3])//east
+                    if(![mazeLevel GetCellAt:(fbxPosition.x * 2) And:(fbxPosition.z * 2)][3])//east
                     {
                         heading = GLKVector3Make(0, 0, 0.005);
                         fbxPosition = fbxTarget;
