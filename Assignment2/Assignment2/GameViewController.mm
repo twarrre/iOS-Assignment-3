@@ -419,7 +419,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     crateLeftAndRightTexture = [self setupTexture:@"crateLeftAndRight.jpg"];
     glActiveTexture(GL_TEXTURE0);
     
-    fbxTexture = [self setupTexture:@"cubeUVTex.jpg"];
+    fbxTexture = [self setupTexture:@"crate.jpg"];
     glActiveTexture(GL_TEXTURE0);
     
     //////////////////////////////////////////////////////////////////////////////////////
@@ -2392,7 +2392,7 @@ int generateSphere(int numSlices, float radius, GLfloat **vertices, GLfloat **no
     // Prepare the FBX SDK.
     InitializeSdkObjects (_sdkManager, _scene) ;
     
-    NSString *modelFileName = [[NSBundle mainBundle] pathForResource:@"cubeUV" ofType:@"fbx"];
+    NSString *modelFileName = [[NSBundle mainBundle] pathForResource:@"Chicken_PT" ofType:@"fbx"];
     [self LoadFBXScene:modelFileName];
 }
 

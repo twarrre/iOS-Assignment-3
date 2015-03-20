@@ -60,6 +60,11 @@
 		A58F711D1AA234E500D739F8 /* crateNoWall.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A58F71191AA234E500D739F8 /* crateNoWall.jpg */; };
 		A599720D1AB612110062FA56 /* cubeUV.fbx in Resources */ = {isa = PBXBuildFile; fileRef = A599720C1AB612110062FA56 /* cubeUV.fbx */; };
 		A599720F1AB612220062FA56 /* cubeUVTex.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A599720E1AB612220062FA56 /* cubeUVTex.jpg */; };
+		A5C6852C1ABB9CE80017AF2E /* chicken_diffuse.tga in Resources */ = {isa = PBXBuildFile; fileRef = A5C6852A1ABB9CE80017AF2E /* chicken_diffuse.tga */; };
+		A5C6852D1ABB9CE80017AF2E /* chicken_diffuse.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A5C6852B1ABB9CE80017AF2E /* chicken_diffuse.jpg */; };
+		A5C685301ABB9CF10017AF2E /* Chicken_PT.fbx in Resources */ = {isa = PBXBuildFile; fileRef = A5C6852E1ABB9CF10017AF2E /* Chicken_PT.fbx */; };
+		A5C685311ABB9CF10017AF2E /* Chicken_BN.fbx in Resources */ = {isa = PBXBuildFile; fileRef = A5C6852F1ABB9CF10017AF2E /* Chicken_BN.fbx */; };
+		A5C685331ABB9F0C0017AF2E /* cubePT.fbx in Resources */ = {isa = PBXBuildFile; fileRef = A5C685321ABB9F0C0017AF2E /* cubePT.fbx */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -159,6 +164,11 @@
 		A58F71191AA234E500D739F8 /* crateNoWall.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = crateNoWall.jpg; sourceTree = "<group>"; };
 		A599720C1AB612110062FA56 /* cubeUV.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = cubeUV.fbx; sourceTree = "<group>"; };
 		A599720E1AB612220062FA56 /* cubeUVTex.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cubeUVTex.jpg; sourceTree = "<group>"; };
+		A5C6852A1ABB9CE80017AF2E /* chicken_diffuse.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = chicken_diffuse.tga; sourceTree = "<group>"; };
+		A5C6852B1ABB9CE80017AF2E /* chicken_diffuse.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = chicken_diffuse.jpg; sourceTree = "<group>"; };
+		A5C6852E1ABB9CF10017AF2E /* Chicken_PT.fbx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Chicken_PT.fbx; sourceTree = "<group>"; };
+		A5C6852F1ABB9CF10017AF2E /* Chicken_BN.fbx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Chicken_BN.fbx; sourceTree = "<group>"; };
+		A5C685321ABB9F0C0017AF2E /* cubePT.fbx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cubePT.fbx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +197,8 @@
 			isa = PBXGroup;
 			children = (
 				A58F71161AA234E500D739F8 /* crateLeftAndRight.jpg */,
+				A5C6852A1ABB9CE80017AF2E /* chicken_diffuse.tga */,
+				A5C6852B1ABB9CE80017AF2E /* chicken_diffuse.jpg */,
 				A599720E1AB612220062FA56 /* cubeUVTex.jpg */,
 				A58F71171AA234E500D739F8 /* crateNoLeft.jpg */,
 				A58F71181AA234E500D739F8 /* crateNoRight.jpg */,
@@ -309,6 +321,9 @@
 			children = (
 				354E06F41AB3AADD0034F63C /* cube.fbx */,
 				A599720C1AB612110062FA56 /* cubeUV.fbx */,
+				A5C685321ABB9F0C0017AF2E /* cubePT.fbx */,
+				A5C6852E1ABB9CF10017AF2E /* Chicken_PT.fbx */,
+				A5C6852F1ABB9CF10017AF2E /* Chicken_BN.fbx */,
 				354E06F51AB3AADD0034F63C /* humanoid.fbx */,
 				354E06DF1AB396440034F63C /* cube2.fbx */,
 				354E06E01AB396440034F63C /* FBXRender.cpp */,
@@ -435,16 +450,21 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5C685311ABB9CF10017AF2E /* Chicken_BN.fbx in Resources */,
+				A5C6852D1ABB9CE80017AF2E /* chicken_diffuse.jpg in Resources */,
 				A584BE191AAA3A3900A36958 /* README in Resources */,
 				A58C6ECE1AA0E37C00373E52 /* Shader.fsh in Resources */,
 				A58F711A1AA234E500D739F8 /* crateLeftAndRight.jpg in Resources */,
 				A58F711D1AA234E500D739F8 /* crateNoWall.jpg in Resources */,
+				A5C685331ABB9F0C0017AF2E /* cubePT.fbx in Resources */,
 				354E06E21AB396440034F63C /* cube2.fbx in Resources */,
 				A58C6ECF1AA0E37C00373E52 /* Shader.vsh in Resources */,
 				A58F711C1AA234E500D739F8 /* crateNoRight.jpg in Resources */,
 				354E06F61AB3AADD0034F63C /* cube.fbx in Resources */,
 				A58C6EAE1AA0CD3200373E52 /* LaunchScreen.xib in Resources */,
 				A570DE521AA7943E0038428E /* MiniMapShader.vsh in Resources */,
+				A5C685301ABB9CF10017AF2E /* Chicken_PT.fbx in Resources */,
+				A5C6852C1ABB9CE80017AF2E /* chicken_diffuse.tga in Resources */,
 				A58C6ED11AA0E3B100373E52 /* crate.jpg in Resources */,
 				A599720F1AB612220062FA56 /* cubeUVTex.jpg in Resources */,
 				A58F711B1AA234E500D739F8 /* crateNoLeft.jpg in Resources */,
