@@ -122,7 +122,28 @@
                                 <state key="normal" title="Toggle FBX Z Direction Movement">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="FBXZMovementToggle:" destination="BV1-FR-VrT" eventType="touchUpInside" id="dqj-oz-pq3"/>
+                                </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="FBX Movement Selected" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Bw-rV-2Sd">
+                                <rect key="frame" x="393" y="28" width="191" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="aF8-td-0Oa"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="FBX XY Movement Rotation" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ao8-Vt-G7r">
+                                <rect key="frame" x="370" y="58" width="214" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="KGa-n9-657"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -131,12 +152,15 @@
                             <constraint firstItem="IL3-Ji-BBu" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="7" id="2Jx-Hf-Tem"/>
                             <constraint firstItem="4Xb-ml-vnm" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="13" id="4bs-ne-2tM"/>
                             <constraint firstItem="lRf-Xu-lT4" firstAttribute="top" secondItem="IL3-Ji-BBu" secondAttribute="bottom" constant="8" id="4ee-8I-pA3"/>
+                            <constraint firstItem="ao8-Vt-G7r" firstAttribute="top" secondItem="3Bw-rV-2Sd" secondAttribute="bottom" constant="9" id="5mp-9y-HAU"/>
                             <constraint firstItem="DOZ-jk-KHu" firstAttribute="trailing" secondItem="3se-qz-xqx" secondAttribute="trailingMargin" id="7Me-0V-qW5"/>
                             <constraint firstItem="2rV-gD-eYo" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="17" id="ARo-7h-hxm"/>
                             <constraint firstItem="T3u-s4-aic" firstAttribute="trailing" secondItem="3se-qz-xqx" secondAttribute="trailingMargin" id="AoB-Sk-QDr"/>
                             <constraint firstItem="2rV-gD-eYo" firstAttribute="top" secondItem="K8m-IQ-ZNI" secondAttribute="bottom" constant="8" id="CUL-BK-1kg"/>
                             <constraint firstItem="DOZ-jk-KHu" firstAttribute="top" secondItem="T3u-s4-aic" secondAttribute="bottom" constant="18" id="EFB-uT-Lfm"/>
                             <constraint firstItem="qHh-Mt-9TT" firstAttribute="top" secondItem="DOZ-jk-KHu" secondAttribute="bottom" constant="28" id="HcI-uX-kSi"/>
+                            <constraint firstItem="3Bw-rV-2Sd" firstAttribute="trailing" secondItem="3se-qz-xqx" secondAttribute="trailingMargin" id="SCv-La-wb0"/>
+                            <constraint firstItem="ao8-Vt-G7r" firstAttribute="trailing" secondItem="3se-qz-xqx" secondAttribute="trailingMargin" id="T9H-Wm-Po2"/>
                             <constraint firstItem="K8m-IQ-ZNI" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="13" id="YGT-LP-Hkl"/>
                             <constraint firstItem="kwk-Tk-JbX" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="13" id="h3v-Gm-oGB"/>
                             <constraint firstItem="lRf-Xu-lT4" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="7" id="mSK-1H-aKr"/>
@@ -144,10 +168,13 @@
                             <constraint firstItem="9RV-Xw-EmF" firstAttribute="top" secondItem="K8m-IQ-ZNI" secondAttribute="bottom" constant="22" id="n0u-3p-Cbq"/>
                             <constraint firstItem="9RV-Xw-EmF" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leadingMargin" constant="13" id="nh6-uB-F8F"/>
                             <constraint firstItem="IL3-Ji-BBu" firstAttribute="top" secondItem="4Xb-ml-vnm" secondAttribute="bottom" constant="8" id="oec-Fw-Zr4"/>
+                            <constraint firstItem="3Bw-rV-2Sd" firstAttribute="top" secondItem="8aa-yV-Osq" secondAttribute="bottom" constant="8" id="yu1-4S-EvI"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="DayNightToggleBtn" destination="lRf-Xu-lT4" id="Pr0-GM-hoO"/>
+                        <outlet property="FBXRotationMovementToggleLabel" destination="3Bw-rV-2Sd" id="1UU-Xv-aT9"/>
+                        <outlet property="FBXZMovementToggleLabel" destination="ao8-Vt-G7r" id="D2s-pI-SOh"/>
                         <outlet property="FarSlider" destination="9RV-Xw-EmF" id="mjI-xs-mjf"/>
                         <outlet property="MiniMap" destination="iCA-PK-dWM" id="2pG-EC-Flc"/>
                         <outlet property="NearSlider" destination="K8m-IQ-ZNI" id="4Yf-Eq-jtg"/>

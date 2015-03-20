@@ -183,6 +183,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     int isFogOn;
     bool consoleMap;
     bool fbxMovementToggle;
+    bool fbxZToggle;
     
     GLKVector3 _directVec;
     GLKVector4 mapScale;
@@ -225,6 +226,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     isFogOn = 1;
     consoleMap = NO;
     fbxMovementToggle = YES;
+    fbxZToggle = NO;
     _fbxScale = 0.1;
     fbxOrientation = 0;
  
@@ -917,7 +919,6 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
 
 -(IBAction)doPinch:(UIPinchGestureRecognizer *)recognizer
 {
-
     if(!isMoving)
     {
         if(abs(-_transEnd.x - fbxPosition.x) < 0.5f && abs(-_transEnd.y - fbxPosition.z) < 0.5f)
@@ -2594,6 +2595,22 @@ int generateSphere(int numSlices, float radius, GLfloat **vertices, GLfloat **no
 - (IBAction)FBXMoveToggle:(id)sender
 {
     fbxMovementToggle = !fbxMovementToggle;
+    
+    if(fbxMovementToggle)
+        [_FBXRotationMovementToggleLabel setText:@"FBX Movement Selected"];
+    else
+        [_FBXRotationMovementToggleLabel setText:@"FBX Rotation Rotation"];
+}
+
+- (IBAction)FBXZMovementToggle:(id)sender
+{
+    fbxZToggle = !fbxZToggle;
+    
+    if(fbxZToggle)
+        [_FBXZMovementToggleLabel setText:@"FBX Z Movement Selected"];
+    else
+        [_FBXZMovementToggleLabel setText:@"FBX XY Movement Rotation"];
+
 }
 
 - (void)InitializeFBX
