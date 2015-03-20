@@ -239,6 +239,13 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     [doubleTwoFingerTap setNumberOfTouchesRequired:2];
     [self.view addGestureRecognizer:doubleTwoFingerTap];
     
+    UITapGestureRecognizer *doubleThreeFingerTap =
+    [[UITapGestureRecognizer alloc] initWithTarget:
+     self action:@selector(doDoubleThreeFingerTap:)];
+    doubleThreeFingerTap.numberOfTapsRequired = 2;
+    [doubleThreeFingerTap setNumberOfTouchesRequired:3];
+    [self.view addGestureRecognizer:doubleThreeFingerTap];
+    
     UIPanGestureRecognizer *rotObj = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(doRotate:)];
     rotObj.minimumNumberOfTouches = 1;
     rotObj.maximumNumberOfTouches = 1;
@@ -761,6 +768,11 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     consoleMap = !consoleMap;
 }
 
+- (IBAction)doDoubleThreeFingerTap:(UITapGestureRecognizer *)recognizer
+{
+    isMoving = !isMoving;
+}
+
 - (IBAction)doRotate:(UIPanGestureRecognizer *)recognizer
 {
     if ([recognizer state] == UIGestureRecognizerStateBegan)
@@ -797,58 +809,70 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
 
 - (IBAction)doFBXPan:(UIPanGestureRecognizer *) recognizer
 {
-    if ([recognizer state] == UIGestureRecognizerStateBegan)
+    if(!isMoving)
     {
-        if(fbxMovementToggle)
-            _fbxTransBegin = GLKVector2Make(0.0f, 0.0f);
-        else
-            _fbxRotBegin = GLKVector2Make(0.0f, 0.0f);
-    }
-    
-    CGPoint translation = [recognizer translationInView:recognizer.view];
-    float x = translation.x / recognizer.view.frame.size.width * 5.0f;
-    float y = translation.y / recognizer.view.frame.size.height * 5.0f;
-    
-    float dx = 0;
-    float dy = 0;
-    if(fbxMovementToggle)
-    {
-        dx = _fbxTransEnd.x + (x-_fbxTransBegin.x);
-        dy = _fbxTransEnd.y - (y-_fbxTransBegin.y);
-    }
-    else
-    {
-        dx = _fbxRotEnd.x + (x-_fbxRotBegin.x);
-        dy = _fbxRotEnd.y - (y-_fbxRotBegin.y);
+        if(abs(_transEnd.x - fbxPosition.x) < 0.5f && abs(_transEnd.y - fbxPosition.z) < 0.5f)
+        {
+            if ([recognizer state] == UIGestureRecognizerStateBegan)
+            {
+                if(fbxMovementToggle)
+                    _fbxTransBegin = GLKVector2Make(0.0f, 0.0f);
+                else
+                    _fbxRotBegin = GLKVector2Make(0.0f, 0.0f);
+            }
+            
+            CGPoint translation = [recognizer translationInView:recognizer.view];
+            float x = translation.x / recognizer.view.frame.size.width * 5.0f;
+            float y = translation.y / recognizer.view.frame.size.height * 5.0f;
+            
+            float dx = 0;
+            float dy = 0;
+            if(fbxMovementToggle)
+            {
+                dx = _fbxTransEnd.x + (x-_fbxTransBegin.x);
+                dy = _fbxTransEnd.y - (y-_fbxTransBegin.y);
+            }
+            else
+            {
+                dx = _fbxRotEnd.x + (x-_fbxRotBegin.x);
+                dy = _fbxRotEnd.y - (y-_fbxRotBegin.y);
 
-    }
-    
-    if(fbxMovementToggle)
-    {
-        _fbxTransEnd = GLKVector2Make(dx, dy);
-        _fbxTransBegin = GLKVector2Make(x, y);
-    }
-    else
-    {
-        _fbxRotEnd = GLKVector2Make(dx, dy);
-        _fbxRotBegin = GLKVector2Make(x, y);
+            }
+            
+            if(fbxMovementToggle)
+            {
+                _fbxTransEnd = GLKVector2Make(dx, dy);
+                _fbxTransBegin = GLKVector2Make(x, y);
+            }
+            else
+            {
+                _fbxRotEnd = GLKVector2Make(dx, dy);
+                _fbxRotBegin = GLKVector2Make(x, y);
+            }
+        }
     }
 }
 
 -(IBAction)doPinch:(UIPinchGestureRecognizer *)recognizer
 {
 
-    if([(UIPinchGestureRecognizer*)recognizer state] == UIGestureRecognizerStateBegan)
+    if(!isMoving)
     {
-        _fbxScalePrev = _fbxScale;
+        if(abs(_transEnd.x - fbxPosition.x) < 0.5f && abs(-_transEnd.y - fbxPosition.z) < 0.5f)
+        {
+            if([(UIPinchGestureRecognizer*)recognizer state] == UIGestureRecognizerStateBegan)
+            {
+                _fbxScalePrev = _fbxScale;
+            }
+
+            _fbxScale = _fbxScalePrev * recognizer.scale;
+
+            if(_fbxScale > 1)
+                _fbxScale = 1;
+            else if(_fbxScale < 0.01)
+                _fbxScale = 0.01;
+        }
     }
-    
-    _fbxScale = _fbxScalePrev * recognizer.scale;
-    
-    if(_fbxScale > 1)
-        _fbxScale = 1;
-    else if(_fbxScale < 0.01)
-        _fbxScale = 0.01;
 }
 
 #pragma mark - GLKView and GLKViewController delegate methods
