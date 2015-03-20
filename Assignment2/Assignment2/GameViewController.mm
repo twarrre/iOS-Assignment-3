@@ -1345,7 +1345,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
         glBindVertexArrayOES(_enemyMapVertArray);
         glUniform1f(mmUniforms[MM_UNIFORM_X_INDEX], fbxPosition.x * 2);
         glUniform1f(mmUniforms[MM_UNIFORM_Y_INDEX], fbxPosition.z * 2);
-        glUniformMatrix4fv(mmUniforms[MM_UNIFORM_ORIENT], 1, 0, GLKMatrix4Rotate(GLKMatrix4Identity, -_rotEnd.x + M_PI, 0.0, 0.0, 1.0).m);
+        glUniformMatrix4fv(mmUniforms[MM_UNIFORM_ORIENT], 1, 0, GLKMatrix4Rotate(GLKMatrix4Identity, -fbxOrientation, 0.0, 0.0, 1.0).m);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _enemyMapIndexBuffer);
         glDrawElements(GL_TRIANGLES, enemyMapNumIndices, GL_UNSIGNED_INT, 0);
         
@@ -1354,7 +1354,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
         glBindVertexArrayOES(_enemyMapVertArray);
         glUniform1f(mmUniforms[MM_UNIFORM_X_INDEX], fbxTarget.x * 2);
         glUniform1f(mmUniforms[MM_UNIFORM_Y_INDEX], fbxTarget     .z * 2);
-        glUniformMatrix4fv(mmUniforms[MM_UNIFORM_ORIENT], 1, 0, GLKMatrix4Rotate(GLKMatrix4Identity, -_rotEnd.x + M_PI, 0.0, 0.0, 1.0).m);
+        glUniformMatrix4fv(mmUniforms[MM_UNIFORM_ORIENT], 1, 0, GLKMatrix4Rotate(GLKMatrix4Identity, -fbxOrientation, 0.0, 0.0, 1.0).m);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _enemyMapIndexBuffer);
         glDrawElements(GL_TRIANGLES, enemyMapNumIndices, GL_UNSIGNED_INT, 0);
         
