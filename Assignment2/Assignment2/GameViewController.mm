@@ -856,7 +856,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
 {
     if(!isMoving)
     {
-        if(abs(_transEnd.x - fbxPosition.x) < 0.5f && abs(_transEnd.y - fbxPosition.z) < 0.5f)
+        if(abs(-_transEnd.x - fbxPosition.x) < 0.5f && abs(-_transEnd.y - fbxPosition.z) < 0.5f)
         {
             if ([recognizer state] == UIGestureRecognizerStateBegan)
             {
@@ -903,7 +903,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
 
     if(!isMoving)
     {
-        if(abs(_transEnd.x - fbxPosition.x) < 0.5f && abs(-_transEnd.y - fbxPosition.z) < 0.5f)
+        if(abs(-_transEnd.x - fbxPosition.x) < 0.5f && abs(-_transEnd.y - fbxPosition.z) < 0.5f)
         {
             if([(UIPinchGestureRecognizer*)recognizer state] == UIGestureRecognizerStateBegan)
             {
