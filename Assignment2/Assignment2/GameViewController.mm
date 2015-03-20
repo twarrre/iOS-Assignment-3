@@ -174,6 +174,8 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     GLKVector2 _fbxTransEnd;
     GLKVector2 _fbxRotBegin;
     GLKVector2 _fbxRotEnd;
+    GLKVector2 _fbxZTransBegin;
+    GLKVector2 _fbxZTransEnd;
     float _fbxScale;
     float _fbxScalePrev;
     
@@ -272,8 +274,8 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     [self.view addGestureRecognizer:fbxPan];
     
     UIPanGestureRecognizer *fbxRot = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(doRotate:)];
-    fbxRot.minimumNumberOfTouches = 4;
-    fbxRot.maximumNumberOfTouches = 4;
+    fbxRot.minimumNumberOfTouches = 3;
+    fbxRot.maximumNumberOfTouches = 3;
     [self.view addGestureRecognizer:rotObj];
     
     UIPinchGestureRecognizer *pinchZoom = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(doPinch:)];
@@ -866,52 +868,90 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
 
 - (IBAction)doFBXPan:(UIPanGestureRecognizer *) recognizer
 {
-    if(!isMoving)
+    if(!fbxZToggle)
     {
-        if(abs(-_transEnd.x - fbxPosition.x) < 0.5f && abs(-_transEnd.y - fbxPosition.z) < 0.5f)
+        if(!isMoving)
         {
-            if ([recognizer state] == UIGestureRecognizerStateBegan)
+            if(abs(-_transEnd.x - fbxPosition.x) < 0.5f && abs(-_transEnd.y - fbxPosition.z) < 0.5f)
             {
+                if ([recognizer state] == UIGestureRecognizerStateBegan)
+                {
+                    if(fbxMovementToggle)
+                        _fbxTransBegin = GLKVector2Make(0.0f, 0.0f);
+                    else
+                        _fbxRotBegin = GLKVector2Make(0.0f, 0.0f);
+                }
+                
+                CGPoint translation = [recognizer translationInView:recognizer.view];
+                float x = translation.x / recognizer.view.frame.size.width * 5.0f;
+                float y = translation.y / recognizer.view.frame.size.height * 5.0f;
+                
+                float dx = 0;
+                float dy = 0;
+                
                 if(fbxMovementToggle)
-                    _fbxTransBegin = GLKVector2Make(0.0f, 0.0f);
+                {
+                    dx = _fbxTransEnd.x + (x-_fbxTransBegin.x);
+                    dy = _fbxTransEnd.y - (y-_fbxTransBegin.y);
+                }
                 else
-                    _fbxRotBegin = GLKVector2Make(0.0f, 0.0f);
-            }
-            
-            CGPoint translation = [recognizer translationInView:recognizer.view];
-            float x = translation.x / recognizer.view.frame.size.width * 5.0f;
-            float y = translation.y / recognizer.view.frame.size.height * 5.0f;
-            
-            float dx = 0;
-            float dy = 0;
-            if(fbxMovementToggle)
-            {
-                dx = _fbxTransEnd.x + (x-_fbxTransBegin.x);
-                dy = _fbxTransEnd.y - (y-_fbxTransBegin.y);
-            }
-            else
-            {
-                dx = _fbxRotEnd.x + (x-_fbxRotBegin.x);
-                dy = _fbxRotEnd.y - (y-_fbxRotBegin.y);
+                {
+                    dx = _fbxRotEnd.x + (x-_fbxRotBegin.x);
+                    dy = _fbxRotEnd.y - (y-_fbxRotBegin.y);
 
-            }
-            
-            if(fbxMovementToggle)
-            {
-                GLKVector2 prevTransEnd = _fbxTransEnd;
+                }
                 
-                _fbxTransEnd = GLKVector2Make(dx, dy);
-                _fbxTransBegin = GLKVector2Make(x, y);
-                
-                if(_fbxTransEnd.x + fbxPosition.x  > fbxPosition.x + 0.25f)
-                    _fbxTransEnd.x = prevTransEnd.x;
-                if(fbxPosition.x + _fbxTransEnd.x  < fbxPosition.x - 0.25f)
-                    _fbxTransEnd.x = prevTransEnd.x;
+                if(fbxMovementToggle)
+                {
+                    GLKVector2 prevTransEnd = _fbxTransEnd;
+                    
+                    _fbxTransEnd = GLKVector2Make(dx, dy);
+                    _fbxTransBegin = GLKVector2Make(x, y);
+                    
+                    if(_fbxTransEnd.x + fbxPosition.x  > fbxPosition.x + 0.25f)
+                        _fbxTransEnd.x = prevTransEnd.x;
+                    if(fbxPosition.x + _fbxTransEnd.x  < fbxPosition.x - 0.25f)
+                        _fbxTransEnd.x = prevTransEnd.x;
+                }
+                else
+                {
+                    _fbxRotEnd = GLKVector2Make(dx, dy);
+                    _fbxRotBegin = GLKVector2Make(x, y);
+                }
             }
-            else
+        }
+    }
+    else
+    {
+        if(!isMoving)
+        {
+            if(abs(-_transEnd.x - fbxPosition.x) < 0.5f && abs(-_transEnd.y - fbxPosition.z) < 0.5f)
             {
-                _fbxRotEnd = GLKVector2Make(dx, dy);
-                _fbxRotBegin = GLKVector2Make(x, y);
+                if ([recognizer state] == UIGestureRecognizerStateBegan)
+                {
+                    _fbxZTransBegin = GLKVector2Make(0.0f, 0.0f);
+                }
+                
+                CGPoint translation = [recognizer translationInView:recognizer.view];
+                float x = translation.x / recognizer.view.frame.size.width * 5.0f;
+                float y = translation.y / recognizer.view.frame.size.height * 5.0f;
+                
+                float dx = 0;
+                float dy = 0;
+                
+                
+                dx = _fbxZTransEnd.x + (x-_fbxZTransBegin.x);
+                dy = _fbxZTransEnd.y - (y-_fbxZTransBegin.y);
+                
+                GLKVector2 prevTransEnd = _fbxZTransEnd;
+                
+                _fbxZTransEnd = GLKVector2Make(dx, dy);
+                _fbxZTransBegin = GLKVector2Make(x, y);
+                
+                if(_fbxZTransEnd.y + fbxPosition.z  > fbxPosition.z + 0.25f)
+                    _fbxZTransEnd.y = prevTransEnd.y;
+                if(fbxPosition.z + _fbxZTransEnd.y  < fbxPosition.z - 0.25f)
+                    _fbxZTransEnd.y = prevTransEnd.y;
             }
         }
     }
@@ -1051,9 +1091,6 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
         fbxPosition = GLKVector3Make(fbxPosition.x + heading.x, fbxPosition.y + heading.y, fbxPosition.z + heading.z);
     }
     
-    //heading = GLKVector3Make(-0.001, 0, 0);
-    //fbxPosition = GLKVector3Make(fbxPosition.x + heading.x, fbxPosition.y + heading.y, fbxPosition.z + heading.z);
-    
     cubeYRot += 0.005f;
     // Set up base model view matrix (place camera)
     GLKMatrix4 baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, 0.0f);
@@ -1089,7 +1126,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     
     _fbxMVMatrix = GLKMatrix4Identity;
     //_fbxMVMatrix = GLKMatrix4Translate(_fbxMVMatrix, _transEnd.x, 0.0f, _transEnd.y);
-    _fbxMVMatrix = GLKMatrix4Translate(_fbxMVMatrix, -_fbxTransEnd.x, _fbxTransEnd.y, 0.0f);
+    _fbxMVMatrix = GLKMatrix4Translate(_fbxMVMatrix, -_fbxTransEnd.x, _fbxTransEnd.y, _fbxZTransEnd.y);
     _fbxMVMatrix = GLKMatrix4Translate(_fbxMVMatrix, fbxPosition.x, fbxPosition.y, fbxPosition.z);
     _fbxMVMatrix = GLKMatrix4Scale(_fbxMVMatrix, _fbxScale, _fbxScale, _fbxScale);
     _fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, fbxOrientation, 0.0f, 1.0f, 0.0f);
