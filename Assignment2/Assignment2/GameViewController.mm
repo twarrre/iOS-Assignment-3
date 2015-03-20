@@ -920,7 +920,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
                         }
                         else
                         {
-                            heading = GLKVector3Make(-0.001, 0, 0);
+                            heading = GLKVector3Make(-0.005, 0, 0);
                             fbxPosition = fbxTarget;
                             fbxTarget = GLKVector3Make(fbxPosition.x - 0.5, fbxPosition.y, fbxPosition.z);
                         }
@@ -937,7 +937,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
                 {
                     if(![mazeLevel GetCellAt:floor(fbxPosition.x) And:floor(fbxPosition.z)][1])//south
                     {
-                        heading = GLKVector3Make(0.001, 0, 0);
+                        heading = GLKVector3Make(0.005, 0, 0);
                         fbxPosition = fbxTarget;
                         fbxTarget = GLKVector3Make(fbxPosition.x + 0.5, fbxPosition.y, fbxPosition.z);
                     }
@@ -953,7 +953,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
                 {
                     if(![mazeLevel GetCellAt:floor(fbxPosition.x) And:floor(fbxPosition.z)][2])//west
                     {
-                        heading = GLKVector3Make(0, 0, -0.001);
+                        heading = GLKVector3Make(0, 0, -0.005);
                         fbxPosition = fbxTarget;
                         fbxTarget = GLKVector3Make(fbxPosition.x, fbxPosition.y, fbxPosition.z - 0.5);
                     }
@@ -970,7 +970,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
                 {
                     if(![mazeLevel GetCellAt:floor(fbxPosition.x) And:floor(fbxPosition.z)][3])//east
                     {
-                        heading = GLKVector3Make(0, 0, 0.001);
+                        heading = GLKVector3Make(0, 0, 0.005);
                         fbxPosition = fbxTarget;
                         fbxTarget = GLKVector3Make(fbxPosition.x, fbxPosition.y, fbxPosition.z + 0.5);
                     }
@@ -1284,6 +1284,15 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
         glBindVertexArrayOES(_enemyMapVertArray);
         glUniform1f(mmUniforms[MM_UNIFORM_X_INDEX], fbxPosition.x * 2);
         glUniform1f(mmUniforms[MM_UNIFORM_Y_INDEX], fbxPosition.z * 2);
+        glUniformMatrix4fv(mmUniforms[MM_UNIFORM_ORIENT], 1, 0, GLKMatrix4Rotate(GLKMatrix4Identity, -_rotEnd.x + M_PI, 0.0, 0.0, 1.0).m);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _enemyMapIndexBuffer);
+        glDrawElements(GL_TRIANGLES, enemyMapNumIndices, GL_UNSIGNED_INT, 0);
+        
+        //draw enemy target
+        glUniform4fv(mmUniforms[MM_UNIFORM_COLOR], 1, GLKVector4Make(0.0f, 1.0f, 0.0f, 0.75f).v);
+        glBindVertexArrayOES(_enemyMapVertArray);
+        glUniform1f(mmUniforms[MM_UNIFORM_X_INDEX], fbxTarget.x * 2);
+        glUniform1f(mmUniforms[MM_UNIFORM_Y_INDEX], fbxTarget     .z * 2);
         glUniformMatrix4fv(mmUniforms[MM_UNIFORM_ORIENT], 1, 0, GLKMatrix4Rotate(GLKMatrix4Identity, -_rotEnd.x + M_PI, 0.0, 0.0, 1.0).m);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _enemyMapIndexBuffer);
         glDrawElements(GL_TRIANGLES, enemyMapNumIndices, GL_UNSIGNED_INT, 0);
