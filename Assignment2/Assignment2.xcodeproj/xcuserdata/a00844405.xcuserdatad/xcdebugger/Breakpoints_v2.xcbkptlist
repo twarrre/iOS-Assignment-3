@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Assignment2/GameViewController.mm"
-            timestampString = "448572956.133314"
+            timestampString = "448578246.160208"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "932"
-            endingLineNumber = "932"
+            startingLineNumber = "934"
+            endingLineNumber = "934"
             landmarkName = "-doPinch:"
             landmarkType = "5">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Assignment2/GameViewController.mm"
-            timestampString = "448565543.601583"
+            timestampString = "448578246.160208"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "815"
-            endingLineNumber = "815"
+            startingLineNumber = "817"
+            endingLineNumber = "817"
             landmarkName = "-doDoubleThreeFingerTap:"
             landmarkType = "5">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Assignment2/GameViewController.mm"
-            timestampString = "448565545.001652"
+            timestampString = "448578246.160208"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "814"
-            endingLineNumber = "814"
+            startingLineNumber = "816"
+            endingLineNumber = "816"
             landmarkName = "-doDoubleTwoFingerTap:"
             landmarkType = "5">
          </BreakpointContent>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Assignment2/GameViewController.mm"
-            timestampString = "448572956.133314"
+            timestampString = "448578246.160208"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "869"
-            endingLineNumber = "869"
+            startingLineNumber = "871"
+            endingLineNumber = "871"
             landmarkName = "-doFBXPan:"
             landmarkType = "5">
          </BreakpointContent>
@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Assignment2/GameViewController.mm"
-            timestampString = "448572956.133314"
+            timestampString = "448578246.160208"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "868"
-            endingLineNumber = "868"
+            startingLineNumber = "870"
+            endingLineNumber = "870"
             landmarkName = "-doFBXPan:"
             landmarkType = "5">
          </BreakpointContent>
@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Assignment2/GameViewController.mm"
-            timestampString = "448572956.133314"
+            timestampString = "448578246.160208"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "921"
-            endingLineNumber = "921"
+            startingLineNumber = "923"
+            endingLineNumber = "923"
             landmarkName = "-doPinch:"
             landmarkType = "5">
          </BreakpointContent>
@@ -106,11 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Assignment2/GameViewController.mm"
-            timestampString = "448572956.133314"
+            timestampString = "448578246.160208"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "902"
-            endingLineNumber = "902"
+            startingLineNumber = "904"
+            endingLineNumber = "904"
             landmarkName = "-doFBXPan:"
             landmarkType = "5">
          </BreakpointContent>

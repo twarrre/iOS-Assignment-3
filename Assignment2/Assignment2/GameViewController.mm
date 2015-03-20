@@ -194,6 +194,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     
     GLKVector3 fbxTarget;
     GLKVector3 fbxPosition;
+    float fbxOrientation;
     GLKVector3 heading;
     bool isMoving;
 }
@@ -225,6 +226,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     consoleMap = NO;
     fbxMovementToggle = YES;
     _fbxScale = 0.1;
+    fbxOrientation = 0;
  
     
     // Set up iOS gesture recognizers
@@ -951,20 +953,12 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
             {
                 case 0:
                 {
+                    fbxOrientation = 270 * M_PI / 180;
                     if(![mazeLevel GetCellAt:fbxPosition.x And:fbxPosition.z][0])//North
                     {
-                        //if(floor(fbxPosition.x) == 0 &&floor(fbxPosition.z) == 0)
-                        //{
-                            //heading = GLKVector3Make(0, 0, 0);
-                            //fbxPosition = fbxTarget;
-                            //fbxTarget = GLKVector3Make(fbxPosition.x, fbxPosition.y, fbxPosition.z);
-                        //}
-                        //else
-                        //{
                             heading = GLKVector3Make(-0.005, 0, 0);
                             fbxPosition = fbxTarget;
                             fbxTarget = GLKVector3Make(fbxPosition.x - 0.5, fbxPosition.y, fbxPosition.z);
-                        //}
                     }
                     else
                     {
@@ -976,6 +970,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
                 }
                 case 1:
                 {
+                    fbxOrientation = 90 * M_PI / 180;
                     if(![mazeLevel GetCellAt:fbxPosition.x And:fbxPosition.z][1])//south
                     {
                         heading = GLKVector3Make(0.005, 0, 0);
@@ -992,6 +987,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
                 }
                 case 2:
                 {
+                    fbxOrientation = 180 * M_PI / 180;
                     if(![mazeLevel GetCellAt:fbxPosition.x And:fbxPosition.z][2])//west
                     {
                         heading = GLKVector3Make(0, 0, -0.005);
@@ -1009,6 +1005,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
                 }
                 case 3:
                 {
+                    fbxOrientation = 0 * M_PI / 180;
                     if(![mazeLevel GetCellAt:fbxPosition.x And:fbxPosition.z][3])//east
                     {
                         heading = GLKVector3Make(0, 0, 0.005);
@@ -1094,7 +1091,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     _fbxMVMatrix = GLKMatrix4Translate(_fbxMVMatrix, -_fbxTransEnd.x, _fbxTransEnd.y, 0.0f);
     _fbxMVMatrix = GLKMatrix4Translate(_fbxMVMatrix, fbxPosition.x, fbxPosition.y, fbxPosition.z);
     _fbxMVMatrix = GLKMatrix4Scale(_fbxMVMatrix, _fbxScale, _fbxScale, _fbxScale);
-    //_fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, _rotEnd.x, 0.0f, 1.0f, 0.0f);
+    _fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, fbxOrientation, 0.0f, 1.0f, 0.0f);
     _fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, _fbxRotEnd.x, 0.0f, 1.0f, 0.0f);
     _fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, -_fbxRotEnd.y, 1.0f, 0.0f, 0.0f);
     //_fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, _rotation, 0.0f, 1.0f, 0.0f);
