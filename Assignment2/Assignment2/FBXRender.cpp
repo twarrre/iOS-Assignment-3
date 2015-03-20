@@ -181,7 +181,8 @@ void FBXRender::TraverseFBXNodes(FbxNode* node)
                 {
                     for(int i = 0; i < 3; i++)
                     {
-                        FbxVector2 uv = uvElement->GetDirectArray().GetAt(vertexCounter * 3 + i);
+                        int uvIndex = mesh->GetTextureUVIndex(polyCounter, polyCounter + i);
+                        FbxVector2 uv = uvElement->GetDirectArray().GetAt(uvIndex);
                         tempUVs[vertexCounter*2+0] = uv[0];
                         tempUVs[vertexCounter*2+1] = uv[1];
                         //tempUVs[vertexCounter*3+2] = uv[2];
