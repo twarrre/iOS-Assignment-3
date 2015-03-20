@@ -2650,6 +2650,16 @@ int generateSphere(int numSlices, float radius, GLfloat **vertices, GLfloat **no
 
 }
 
+- (IBAction)ResetEnemy:(id)sender {
+    _fbxTransEnd = GLKVector2Make(0.0f, 0.0f);
+    _fbxZTransEnd = GLKVector2Make(0.0f, 0.0f);
+    _fbxRotEnd = GLKVector2Make(0.0f, 0.0f);
+    fbxTarget = GLKVector3Make(0, -0.25f, 0);
+    fbxPosition = GLKVector3Make(0, -0.25f, 0);
+    fbxOrientation = 0.0f;
+    _fbxScale = 0.1f;
+}
+
 - (void)InitializeFBX
 {
     // Prepare the FBX SDK.
