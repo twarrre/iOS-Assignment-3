@@ -945,24 +945,26 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
         {
             int direction = arc4random() % 4;
             
+            fbxPosition = GLKVector3Make(RoundTo(fbxPosition.x, 0.5), fbxPosition.y, RoundTo(fbxPosition.z , 0.5));
+            
             switch(direction)
             {
                 case 0:
                 {
-                    if(![mazeLevel GetCellAt:floor(fbxPosition.x) And:floor(fbxPosition.z)][0])//North
+                    if(![mazeLevel GetCellAt:fbxPosition.x And:fbxPosition.z][0])//North
                     {
-                        if(floor(fbxPosition.x) == 0 &&floor(fbxPosition.z) == 0)
-                        {
-                            heading = GLKVector3Make(0, 0, 0);
-                            fbxPosition = fbxTarget;
-                            fbxTarget = GLKVector3Make(fbxPosition.x, fbxPosition.y, fbxPosition.z);
-                        }
-                        else
-                        {
+                        //if(floor(fbxPosition.x) == 0 &&floor(fbxPosition.z) == 0)
+                        //{
+                            //heading = GLKVector3Make(0, 0, 0);
+                            //fbxPosition = fbxTarget;
+                            //fbxTarget = GLKVector3Make(fbxPosition.x, fbxPosition.y, fbxPosition.z);
+                        //}
+                        //else
+                        //{
                             heading = GLKVector3Make(-0.005, 0, 0);
                             fbxPosition = fbxTarget;
                             fbxTarget = GLKVector3Make(fbxPosition.x - 0.5, fbxPosition.y, fbxPosition.z);
-                        }
+                        //}
                     }
                     else
                     {
@@ -974,7 +976,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
                 }
                 case 1:
                 {
-                    if(![mazeLevel GetCellAt:floor(fbxPosition.x) And:floor(fbxPosition.z)][1])//south
+                    if(![mazeLevel GetCellAt:fbxPosition.x And:fbxPosition.z][1])//south
                     {
                         heading = GLKVector3Make(0.005, 0, 0);
                         fbxPosition = fbxTarget;
@@ -990,7 +992,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
                 }
                 case 2:
                 {
-                    if(![mazeLevel GetCellAt:floor(fbxPosition.x) And:floor(fbxPosition.z)][2])//west
+                    if(![mazeLevel GetCellAt:fbxPosition.x And:fbxPosition.z][2])//west
                     {
                         heading = GLKVector3Make(0, 0, -0.005);
                         fbxPosition = fbxTarget;
@@ -1007,7 +1009,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
                 }
                 case 3:
                 {
-                    if(![mazeLevel GetCellAt:floor(fbxPosition.x) And:floor(fbxPosition.z)][3])//east
+                    if(![mazeLevel GetCellAt:fbxPosition.x And:fbxPosition.z][3])//east
                     {
                         heading = GLKVector3Make(0, 0, 0.005);
                         fbxPosition = fbxTarget;
@@ -1023,11 +1025,35 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
                 }
             }
             
+            if(fbxTarget.x > (mazeLevel.GetWidth - 1) * 0.5)
+            {
+                fbxTarget.x = (mazeLevel.GetWidth - 1) * 0.5;
+                heading = GLKVector3Make(0, 0, 0);
+            }
+            
+            if(fbxTarget.z > (mazeLevel.GetLength - 1) * 0.5)
+            {
+                fbxTarget.z = (mazeLevel.GetLength - 1) * 0.5;
+                heading = GLKVector3Make(0, 0, 0);
+            }
+            
+            if(fbxTarget.x < 0)
+            {
+                fbxTarget.x = 0;
+                heading = GLKVector3Make(0, 0, 0);
+            }
+            
+            if(fbxTarget.z < 0)
+            {
+                fbxTarget.z = 0;
+                heading = GLKVector3Make(0, 0, 0);
+            }
+            
         }
         fbxPosition = GLKVector3Make(fbxPosition.x + heading.x, fbxPosition.y + heading.y, fbxPosition.z + heading.z);
     }
     
-    //heading = GLKVector3Make(0, 0, -0.001);
+    //heading = GLKVector3Make(-0.001, 0, 0);
     //fbxPosition = GLKVector3Make(fbxPosition.x + heading.x, fbxPosition.y + heading.y, fbxPosition.z + heading.z);
     
     cubeYRot += 0.005f;
