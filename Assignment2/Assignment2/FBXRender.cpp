@@ -77,7 +77,7 @@ void FBXRender::TraverseFBXNodes(FbxNode* node)
 {
 	// Grab the name
 	const char* nodeName = node->GetName();
-    //printf("Traversing node <%s>\n", nodeName);
+    ////////printf("Traversing node <%s>\n", nodeName);
 	
 	// Get any transforms that could change the position
 	FbxDouble3 trans = node->LclTranslation.Get();
@@ -93,7 +93,7 @@ void FBXRender::TraverseFBXNodes(FbxNode* node)
 		if (mesh != NULL) {
 			// ========= Get the vertices from the mesh ==============
 			const char *name = mesh->GetName();
-            //printf("\tChild %d = <%s>\n", i, name);
+            ////////printf("\tChild %d = <%s>\n", i, name);
             
             // ========= Get the indices from the mesh ===============
             numIndices = mesh->GetPolygonVertexCount();
@@ -156,11 +156,11 @@ void FBXRender::TraverseFBXNodes(FbxNode* node)
                         tempUVs[(sInd + i) * 2] = uv[0];
                         tempUVs[(sInd + i) * 2 + 1] = uv[1] * -1;
                         //tempUVs[vertexCounter*3+2] = uv[2];
-                        printf("%d\n", sInd + i);
+                        //////////printf("%d\n", sInd + i);
                         
-                        printf("%f\n", uv[0]);
-                        printf("%f\n", uv[1]);
-                        //printf("%f\n", uv[2]);
+                        ////////printf("%f\n", uv[0]);
+                        ////////printf("%f\n", uv[1]);
+                        ////////printf("%f\n", uv[2]);
                     }
                     vertexCounter += 1;
                 }
