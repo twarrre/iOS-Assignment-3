@@ -816,6 +816,14 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
 - (IBAction)doDoubleThreeFingerTap:(UITapGestureRecognizer *)recognizer
 {
     isMoving = !isMoving;
+    if(isMoving)
+    {
+        fbxTarget = fbxPosition;
+    }
+    else
+    {
+        fbxPosition = GLKVector3Make(RoundTo(fbxPosition.x, 0.5), fbxPosition.y, RoundTo(fbxPosition.z, 0.5));
+    }
 }
 
 - (IBAction)doRotate:(UIPanGestureRecognizer *)recognizer
@@ -886,8 +894,15 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
             
             if(fbxMovementToggle)
             {
+                GLKVector2 prevTransEnd = _fbxTransEnd;
+                
                 _fbxTransEnd = GLKVector2Make(dx, dy);
                 _fbxTransBegin = GLKVector2Make(x, y);
+                
+                if(_fbxTransEnd.x + fbxPosition.x  > fbxPosition.x + 0.25f)
+                    _fbxTransEnd.x = prevTransEnd.x;
+                if(fbxPosition.x + _fbxTransEnd.x  < fbxPosition.x - 0.25f)
+                    _fbxTransEnd.x = prevTransEnd.x;
             }
             else
             {
@@ -1012,8 +1027,6 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
         fbxPosition = GLKVector3Make(fbxPosition.x + heading.x, fbxPosition.y + heading.y, fbxPosition.z + heading.z);
     }
     
-    printf("Target: %f, %f, %f\n", fbxTarget.x, fbxTarget.y, fbxTarget.z);
-    printf("Position: %f, %f, %f\n", fbxPosition.x, fbxPosition.y, fbxPosition.z);
     //heading = GLKVector3Make(0, 0, -0.001);
     //fbxPosition = GLKVector3Make(fbxPosition.x + heading.x, fbxPosition.y + heading.y, fbxPosition.z + heading.z);
     
@@ -2590,6 +2603,16 @@ int generateSphere(int numSlices, float radius, GLfloat **vertices, GLfloat **no
     fbxRender.Initialize(rootNode, vPosition, vNormal, vTexCoord);
     
     return TRUE;
+}
+
+float RoundTo(float number, float to)
+{
+    if (number >= 0) {
+        return to * floorf(number / to + 0.5f);
+    }
+    else {
+        return to * ceilf(number / to - 0.5f);
+    }
 }
 
 @end
