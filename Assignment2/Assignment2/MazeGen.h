@@ -18,14 +18,19 @@ struct MazeClass;
     struct MazeClass *mazeObject;
 }
 
+//Creates the maze
 -(void)CreateMaze;
 
+//Gets the width of the maze
 -(int)GetWidth;
 
+//Gets the length of the maze
 -(int)GetLength;
 
+//Get the specific cell at the particular indices
 -(bool*)GetCellAt:(int)row And:(int)col;
 
+//Gets the map in a string
 -(NSString*)GetMap;
 
 @end

@@ -50,7 +50,6 @@ void main()
     float nDotVP = max(0.0, dot(N, normalize(diffuseLightPosition)));
     vec4 diffuse = diffuseComponent * nDotVP;
     
-    //vec3 newEye = vec3(eyePos.x * fLRot.x, eyePos.y * fLRot.y, eyePos.z * fLRot.z);
     vec3 E = normalize(-eyePos.xyz);
     vec3 L = normalize(flashlightPosition + eyePos.xyz);
     vec3 H = normalize(L+E);
@@ -73,18 +72,7 @@ void main()
     {
         specular = vec4(0.0, 0.0, 0.0, 1.0);
     }
-    /*
-    if( dot(L, N) < 0.0  || flashLightOn.x < 0.5) {
-        specular = vec4(0.0, 0.0, 0.0, 1.0);
-    }
-    else
-    {
-        specular = Ks*specularComponent;
-    }*/
     
-    /* add ambient and specular components here as in:
-     gl_FragColor = (ambient + diffuse + specular) * texture2D(texture, texCoordOut);
-     */
     vec4 fogCol = vec4(0.5, 0.5, 0.5, 1.0);
     vec4 finalCol = (ambient + diffuse + specular) * texture2D(texture, texCoordOut);
     if(fogOn.x > 0.5)

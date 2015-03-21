@@ -45,10 +45,6 @@ public:
 
 private:
     bool initialized;
-	//GLfloat *vertices;
-	//GLfloat *normals;
-	//GLuint *indices;
-	//GLuint numVertices, numNormals, numIndices;
     GLuint vbo[2];
     GLuint vidx;
 	MeshExtents meshExtents;

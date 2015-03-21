@@ -64,7 +64,6 @@ void main()
     float z = length(eyePos);
     fogFactor = (far - z) / (far - near);
     fogFactor = clamp(fogFactor, 0.0, 1.0);
-    // Set gl_Position with transformed vertex position
 
     gl_Position = modelViewProjectionMatrix * newPosition;
 }

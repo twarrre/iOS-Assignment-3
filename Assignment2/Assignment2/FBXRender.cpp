@@ -75,10 +75,6 @@ bool FBXRender::Render()
 
 void FBXRender::TraverseFBXNodes(FbxNode* node)
 {
-	// Grab the name
-	const char* nodeName = node->GetName();
-    ////////printf("Traversing node <%s>\n", nodeName);
-	
 	// Get any transforms that could change the position
 	FbxDouble3 trans = node->LclTranslation.Get();
 	FbxDouble3 rot = node->LclRotation.Get();
@@ -92,17 +88,12 @@ void FBXRender::TraverseFBXNodes(FbxNode* node)
 		FbxMesh* mesh = childNode->GetMesh();
 		if (mesh != NULL) {
 			// ========= Get the vertices from the mesh ==============
-			const char *name = mesh->GetName();
-            ////////printf("\tChild %d = <%s>\n", i, name);
             
             // ========= Get the indices from the mesh ===============
             numIndices = mesh->GetPolygonVertexCount();
             indices = (GLuint *)mesh->GetPolygonVertices();
             
-			//int numVerts = mesh->GetControlPointsCount();
-            //int numPoly = mesh->GetPolygonCount();
 			GLfloat* tempVerts = new GLfloat[numIndices * 3];
-            int index = 0;
 			for (int j = 0; j < numIndices; j++) {
 				FbxVector4 coord = mesh->GetControlPointAt(indices[j]);
 				tempVerts[j*3+0] = (GLfloat)coord.mData[0];
@@ -113,8 +104,6 @@ void FBXRender::TraverseFBXNodes(FbxNode* node)
 			vertices = tempVerts;
 			numVertices = numIndices;
 			
-
-
 			// ========= Get the normals from the mesh ===============
 			FbxGeometryElementNormal* normalElement = mesh->GetElementNormal();
 			if (normalElement) {
@@ -155,21 +144,11 @@ void FBXRender::TraverseFBXNodes(FbxNode* node)
                         FbxVector2 uv = uvElement->GetDirectArray().GetAt(uvIndex);
                         tempUVs[(sInd + i) * 2] = uv[0];
                         tempUVs[(sInd + i) * 2 + 1] = uv[1] * -1;
-                        //tempUVs[vertexCounter*3+2] = uv[2];
-                        //////////printf("%d\n", sInd + i);
-                        
-                        ////////printf("%f\n", uv[0]);
-                        ////////printf("%f\n", uv[1]);
-                        ////////printf("%f\n", uv[2]);
                     }
                     vertexCounter += 1;
                 }
                 uvs = tempUVs;
             }
-            // ========= Get the indices from the mesh ===============
-            //numUVIndices = numUVs / 2.0f;
-            //uvIndices = mesh->GetControlPointAt(0).GetElementUV(0).uvIndices;
-            //(GLuint *)mesh->GetControlPointAt(0).GetElementUV(0).uvIndices;
 		} // else
 
 		TraverseFBXNodes(childNode);
@@ -178,20 +157,11 @@ void FBXRender::TraverseFBXNodes(FbxNode* node)
 
 void FBXRender::LoadVBO(GLuint shaderPosAttr, GLuint shaderNormalAttr)
 {
-	int offset = 0;
-	
-	int sizeBuffer = (numVertices * 3 + numNormals * 3 + numUVs * 2) * sizeof(GLfloat);
-	
-	//glBufferData(GL_ARRAY_BUFFER, sizeBuffer, NULL, GL_STATIC_DRAW);
-
 	if (vertices) {
         glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
         glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 3 * numVertices, vertices, GL_STATIC_DRAW);
         glEnableVertexAttribArray(shaderPosAttr);
         glVertexAttribPointer(shaderPosAttr, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
-		//glBufferSubData(GL_ARRAY_BUFFER, offset, numVertices * 3 * sizeof(GLfloat), this->vertices);
-		//glVertexAttribPointer(shaderPosAttr, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		//offset += numVertices * 3 * sizeof(GLfloat);
 	}
 
 	if (normals) {
@@ -199,8 +169,5 @@ void FBXRender::LoadVBO(GLuint shaderPosAttr, GLuint shaderNormalAttr)
         glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 3 * numNormals, normals, GL_STATIC_DRAW);
         glEnableVertexAttribArray(shaderNormalAttr);
         glVertexAttribPointer(shaderNormalAttr, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
-		//glBufferSubData(GL_ARRAY_BUFFER, offset, numNormals * 3 *sizeof(GLfloat), this->normals);
-		//glVertexAttribPointer(shaderNormalAttr, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(offset));
-		//offset += numNormals * 3 * sizeof(GLfloat);
 	}
 }

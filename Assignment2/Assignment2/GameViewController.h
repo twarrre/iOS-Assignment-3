@@ -14,16 +14,34 @@
 {
     MazeGen *mazeLevel;
 }
+//The fog near slider
 @property (weak, nonatomic) IBOutlet UISlider *NearSlider;
+//The fog far slider
 @property (weak, nonatomic) IBOutlet UISlider *FarSlider;
+//Toggle between day and night
 @property (weak, nonatomic) IBOutlet UIButton *DayNightToggleBtn;
+//Minimap
 @property (weak, nonatomic) IBOutlet UILabel *MiniMap;
-- (IBAction)ToggleDayNight:(id)sender;
-- (IBAction)FlashLightToggle:(id)sender;
-- (IBAction)FogToggle:(id)sender;
-- (IBAction)FBXMoveToggle:(id)sender;
-- (IBAction)FBXZMovementToggle:(id)sender;
-- (IBAction)ResetEnemy:(id)sender;
+//Label for fbx rotation toggle
 @property (strong, nonatomic) IBOutlet UILabel *FBXRotationMovementToggleLabel;
+//Label for fbx movement toggle
 @property (strong, nonatomic) IBOutlet UILabel *FBXZMovementToggleLabel;
+
+//Toggles day and night
+- (IBAction)ToggleDayNight:(id)sender;
+
+//Toggles the flashlight
+- (IBAction)FlashLightToggle:(id)sender;
+
+//Toggles the fog
+- (IBAction)FogToggle:(id)sender;
+
+//Toggles the movement/rotation
+- (IBAction)FBXMoveToggle:(id)sender;
+
+//Toggles the z rotation
+- (IBAction)FBXZMovementToggle:(id)sender;
+
+//Resets the enemy
+- (IBAction)ResetEnemy:(id)sender;
 @end

@@ -58,8 +58,8 @@ enum
 };
 GLint mmUniforms[MM_NUM_UNIFORMS];
 
-
-@interface GameViewController () {
+@interface GameViewController ()
+{
     GLuint _program;
     GLuint _mmProgram;
     
@@ -79,7 +79,6 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     GLKMatrix3 _fbxNormalMatrix;
     
     // Lighting parameters
-    /* specify lighting parameters here...e.g., GLKVector3 flashlightPosition; */
     GLKVector3 flashlightPosition;
     GLKVector3 diffuseLightPosition;
     GLKVector4 diffuseComponent;
@@ -93,7 +92,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     float xRot, yRot;
     CGPoint dragStart;
     
-    // Shape vertices, etc. and textures
+    // Shape vertices
     GLfloat *vertices, *normals, *texCoords,
         *playerVertices, *playerNormals, *playerTexCoords,
         *floorVertices, *floorNormals, *floorTexCoords,
@@ -105,6 +104,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
         *fbxVertices, *fbxNormals,
         *enemyMapVertices, *enemyMapNormals, *enemyMapTexCoords;
     
+    // Shap indices
     GLuint numIndices, *indices,
         playerNumIndices, *playerIndices,
         floorNumIndices, *floorIndices,
@@ -116,7 +116,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
         fbxNumIndices, *fbxIndices,
         enemyMapNumIndices, *enemyMapIndices;
     
-    /* texture parameters ??? */
+    //Textures
     GLuint crateTexture,
     crateNoWallTexture,
     crateNoLeftTexture,
@@ -166,6 +166,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     GLuint _fbxVertBuffers[3];
     GLuint _fbxIndexBuffer;
     
+    //Rotations, translations and scales
     GLKVector2 _transBegin;
     GLKVector2 _transEnd;
     GLKVector2 _rotBegin;
@@ -232,7 +233,6 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     fbxZToggle = NO;
     _fbxScale = 0.1;
     fbxOrientation = 0;
- 
     
     // Set up iOS gesture recognizers
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doSingleTap:)];
@@ -343,7 +343,6 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX] = glGetUniformLocation(_program, "modelViewProjectionMatrix");
     uniforms[UNIFORM_NORMAL_MATRIX] = glGetUniformLocation(_program, "normalMatrix");
     uniforms[UNIFORM_MODELVIEW_MATRIX] = glGetUniformLocation(_program, "modelViewMatrix");
-    /* more needed here... */
     uniforms[UNIFORM_TEXTURE] = glGetUniformLocation(_program, "texture");
     uniforms[UNIFORM_FLASHLIGHT_POSITION] = glGetUniformLocation(_program, "flashlightPosition");
     uniforms[UNIFORM_DIFFUSE_LIGHT_POSITION] = glGetUniformLocation(_program, "diffuseLightPosition");
@@ -373,7 +372,6 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     
     
     // Set up lighting parameters
-    /* set values, e.g., flashlightPosition = GLKVector3Make(0.0, 0.0, 1.0); */
     flashlightPosition = GLKVector3Make(_transEnd.x, 0.0f, _transEnd.y + 1);
     diffuseLightPosition = GLKVector3Make(0.0, 1.0, 0.0);
     diffuseComponent = GLKVector4Make(0.8, 0.1, 0.1, 1.0);
@@ -387,15 +385,39 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     
+    // Load in and set texture
+    crateTexture = [self setupTexture:@"crate.jpg"];
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, crateTexture);
+    glUniform1i(uniforms[UNIFORM_TEXTURE], 0);
+    
+    crateNoWallTexture = [self setupTexture:@"crateNoWall.jpg"];
+    glActiveTexture(GL_TEXTURE0);
+    
+    crateNoLeftTexture = [self setupTexture:@"crateNoLeft.jpg"];
+    glActiveTexture(GL_TEXTURE0);
+    
+    crateNoRightTexture = [self setupTexture:@"crateNoRight.jpg"];
+    glActiveTexture(GL_TEXTURE0);
+    
+    crateLeftAndRightTexture = [self setupTexture:@"crateLeftAndRight.jpg"];
+    glActiveTexture(GL_TEXTURE0);
+    
+    fbxTexture = [self setupTexture:TEXTURENAME];
+    glActiveTexture(GL_TEXTURE0);
+    
+    //
+    // Generate vertices
+    //
+    // Cube
+    //
     glGenVertexArraysOES(1, &_vertexArray);
     glBindVertexArrayOES(_vertexArray);
     
     glGenBuffers(3, _vertexBuffers);
     glGenBuffers(1, &_indexBuffer);
     
-    // Generate vertices
     int numVerts;
-    //numIndices = generateSphere(50, 1, &vertices, &normals, &texCoords, &indices, &numVerts);
     numIndices = generateCube(0.2, &vertices, &normals, &texCoords, &indices, &numVerts);
     
     // Set up GL buffers
@@ -419,43 +441,20 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     
     glBindVertexArrayOES(0);
     
-    // Load in and set texture
-    /* use setupTexture to create crate texture */
-    crateTexture = [self setupTexture:@"crate.jpg"];
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, crateTexture);
-    glUniform1i(uniforms[UNIFORM_TEXTURE], 0);
-    
-    crateNoWallTexture = [self setupTexture:@"crateNoWall.jpg"];
-    glActiveTexture(GL_TEXTURE0);
-    
-    crateNoLeftTexture = [self setupTexture:@"crateNoLeft.jpg"];
-    glActiveTexture(GL_TEXTURE0);
-    
-    crateNoRightTexture = [self setupTexture:@"crateNoRight.jpg"];
-    glActiveTexture(GL_TEXTURE0);
-    
-    crateLeftAndRightTexture = [self setupTexture:@"crateLeftAndRight.jpg"];
-    glActiveTexture(GL_TEXTURE0);
-    
-    fbxTexture = [self setupTexture:TEXTURENAME];
-    glActiveTexture(GL_TEXTURE0);
-    
     //////////////////////////////////////////////////////////////////////////////////////
     // Generate Enemy MiniMap vertices
     
+    //
+    // Generate vertices
+    //
+    // Enemy
+    //
     glGenVertexArraysOES(1, &_enemyMapVertArray);
     glBindVertexArrayOES(_enemyMapVertArray);
     
     glGenBuffers(3, _enemyMapVertBuffers);
     glGenBuffers(1, &_enemyMapIndexBuffer);
-    
-    //
-    // Generate vertices
-    //
-    // Player
     int enemyMapNumVerts;
-    //numIndices = generateSphere(50, 1, &vertices, &normals, &texCoords, &indices, &numVerts);
     enemyMapNumIndices = generateEnemy(1, &enemyMapVertices, &enemyMapNormals, &enemyMapTexCoords, &enemyMapIndices, &enemyMapNumVerts);
     
     // Set up GL buffers
@@ -483,18 +482,18 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     //////////////////////////////////////////////////////////////////////////////////////
     // Generate Maze vertices
     
+    //
+    // Generate vertices
+    //
+    // Player
+    //
     glGenVertexArraysOES(1, &_playerVertArray);
     glBindVertexArrayOES(_playerVertArray);
     
     glGenBuffers(3, _playerVertBuffers);
     glGenBuffers(1, &_playerIndexBuffer);
-    
-    //
-    // Generate vertices
-    //
-    // Player
+
     int playerNumVerts;
-    //numIndices = generateSphere(50, 1, &vertices, &normals, &texCoords, &indices, &numVerts);
     playerNumIndices = generatePlayer(1, &playerVertices, &playerNormals, &playerTexCoords, &playerIndices, &playerNumVerts);
     
     // Set up GL buffers
@@ -517,20 +516,19 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int)*playerNumIndices, playerIndices, GL_STATIC_DRAW);
     
     glBindVertexArrayOES(0);
-    
-    
-    glGenVertexArraysOES(1, &_floorVertArray);
-    glBindVertexArrayOES(_floorVertArray);
-    
-    glGenBuffers(3, _floorVertBuffers);
-    glGenBuffers(1, &_floorIndexBuffer);
 
     //
     // Generate vertices
     //
     // Floor
+    //
+    glGenVertexArraysOES(1, &_floorVertArray);
+    glBindVertexArrayOES(_floorVertArray);
+    
+    glGenBuffers(3, _floorVertBuffers);
+    glGenBuffers(1, &_floorIndexBuffer);
+    
     int floorNumVerts;
-    //numIndices = generateSphere(50, 1, &vertices, &normals, &texCoords, &indices, &numVerts);
     floorNumIndices = generateFloor(1, &floorVertices, &floorNormals, &floorTexCoords, &floorIndices, &floorNumVerts);
     
     // Set up GL buffers
@@ -553,20 +551,19 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int)*floorNumIndices, floorIndices, GL_STATIC_DRAW);
     
     glBindVertexArrayOES(0);
-
     
+    //
+    // Generate vertices
+    //
+    // Ceiling
+    //
     glGenVertexArraysOES(1, &_ceilingVertArray);
     glBindVertexArrayOES(_ceilingVertArray);
     
     glGenBuffers(3, _ceilingVertBuffers);
     glGenBuffers(1, &_ceilingIndexBuffer);
     
-    //
-    // Generate vertices
-    //
-    // Ceiling
     int ceilingNumVerts;
-    //numIndices = generateSphere(50, 1, &vertices, &normals, &texCoords, &indices, &numVerts);
     ceilingNumIndices = generateCeiling(1, &ceilingVertices, &ceilingNormals, &ceilingTexCoords, &ceilingIndices, &ceilingNumVerts);
     
     // Set up GL buffers
@@ -590,19 +587,18 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     
     glBindVertexArrayOES(0);
 
-    
+    //
+    // Generate vertices
+    //
+    // North
+    //
     glGenVertexArraysOES(1, &_northVertArray);
     glBindVertexArrayOES(_northVertArray);
     
     glGenBuffers(3, _northVertBuffers);
     glGenBuffers(1, &_northIndexBuffer);
-    
-    //
-    // Generate vertices
-    //
-    // North
+
     int northNumVerts;
-    //numIndices = generateSphere(50, 1, &vertices, &normals, &texCoords, &indices, &numVerts);
     northNumIndices = generateNorthWall(1, &northVertices, &northNormals, &northTexCoords, &northIndices, &northNumVerts);
     
     // Set up GL buffers
@@ -625,20 +621,19 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int)*northNumIndices, northIndices, GL_STATIC_DRAW);
     
     glBindVertexArrayOES(0);
-
     
+    //
+    // Generate vertices
+    //
+    // South
+    //
     glGenVertexArraysOES(1, &_southVertArray);
     glBindVertexArrayOES(_southVertArray);
     
     glGenBuffers(3, _southVertBuffers);
     glGenBuffers(1, &_southIndexBuffer);
     
-    //
-    // Generate vertices
-    //
-    // South
     int southNumVerts;
-    //numIndices = generateSphere(50, 1, &vertices, &normals, &texCoords, &indices, &numVerts);
     southNumIndices = generateSouthWall(1, &southVertices, &southNormals, &southTexCoords, &southIndices, &southNumVerts);
     
     // Set up GL buffers
@@ -662,19 +657,18 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     
     glBindVertexArrayOES(0);
     
-    
+    //
+    // Generate vertices
+    //
+    // West
+    //
     glGenVertexArraysOES(1, &_westVertArray);
     glBindVertexArrayOES(_westVertArray);
     
     glGenBuffers(3, _westVertBuffers);
     glGenBuffers(1, &_westIndexBuffer);
-    
-    //
-    // Generate vertices
-    //
-    // West
+
     int westNumVerts;
-    //numIndices = generateSphere(50, 1, &vertices, &normals, &texCoords, &indices, &numVerts);
     westNumIndices = generateWestWall(1, &westVertices, &westNormals, &westTexCoords, &westIndices, &westNumVerts);
     
     // Set up GL buffers
@@ -698,19 +692,18 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     
     glBindVertexArrayOES(0);
     
-    
+    //
+    // Generate vertices
+    //
+    // East
+    //
     glGenVertexArraysOES(1, &_eastVertArray);
     glBindVertexArrayOES(_eastVertArray);
     
     glGenBuffers(3, _eastVertBuffers);
     glGenBuffers(1, &_eastIndexBuffer);
     
-    //
-    // Generate vertices
-    //
-    // East
     int eastNumVerts;
-    //numIndices = generateSphere(50, 1, &vertices, &normals, &texCoords, &indices, &numVerts);
     eastNumIndices = generateEastWall(1, &eastVertices, &eastNormals, &eastTexCoords, &eastIndices, &eastNumVerts);
     
     // Set up GL buffers
@@ -796,14 +789,13 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     }
 }
 
-
 #pragma mark - iOS gesture events
-
 - (IBAction)doSingleTap:(UITapGestureRecognizer *)recognizer
 {
     dragStart = [recognizer locationInView:self.view];
 }
 
+//resets the player
 - (IBAction)doDoubleTap:(UITapGestureRecognizer *) recognizer
 {
     xRot = 30 * M_PI / 180;;
@@ -811,14 +803,15 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     _rotation = 0.0f;
     _transEnd.x = 0.0f;
     _transEnd.y = 0.0f;
-    
 }
 
+//toggles the minimap
 - (IBAction)doDoubleTwoFingerTap:(UITapGestureRecognizer *)recognizer
 {
     consoleMap = !consoleMap;
 }
 
+//toggles if th fbx is moving
 - (IBAction)doDoubleThreeFingerTap:(UITapGestureRecognizer *)recognizer
 {
     isMoving = !isMoving;
@@ -832,6 +825,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     }
 }
 
+//rotates the camera
 - (IBAction)doRotate:(UIPanGestureRecognizer *)recognizer
 {
     if ([recognizer state] == UIGestureRecognizerStateBegan)
@@ -849,6 +843,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     _rotBegin = GLKVector2Make(x, y);
 }
 
+//translates the player
 - (IBAction)doTranslate:(UIPanGestureRecognizer *) recognizer
 {
     if ([recognizer state] == UIGestureRecognizerStateBegan)
@@ -866,12 +861,14 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     _transBegin = GLKVector2Make(x, y);
 }
 
+//handles the movement and rotation of the fbx
 - (IBAction)doFBXPan:(UIPanGestureRecognizer *) recognizer
 {
     if(!fbxZToggle)
     {
         if(!isMoving)
         {
+            //if you are within the cell
             if(abs(-_transEnd.x - fbxPosition.x) < 0.5f && abs(-_transEnd.y - fbxPosition.z) < 0.5f)
             {
                 if ([recognizer state] == UIGestureRecognizerStateBegan)
@@ -925,6 +922,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     {
         if(!isMoving)
         {
+            //if you are within the cell
             if(abs(-_transEnd.x - fbxPosition.x) < 0.5f && abs(-_transEnd.y - fbxPosition.z) < 0.5f)
             {
                 if ([recognizer state] == UIGestureRecognizerStateBegan)
@@ -957,10 +955,12 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     }
 }
 
+//zoom the fbx
 -(IBAction)doPinch:(UIPinchGestureRecognizer *)recognizer
 {
     if(!isMoving)
     {
+        //if you are within the cell
         if(abs(-_transEnd.x - fbxPosition.x) < 0.5f && abs(-_transEnd.y - fbxPosition.z) < 0.5f)
         {
             if([(UIPinchGestureRecognizer*)recognizer state] == UIGestureRecognizerStateBegan)
@@ -982,61 +982,68 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
 
 - (void)update
 {
+    //Update the FBX Ai position
     if(isMoving)
     {
+        //If it is at the target, to a certain degree
         if(abs(fbxPosition.x - fbxTarget.x) < 0.005 && abs(fbxPosition.z - fbxTarget.z) < 0.005)
         {
-            int direction = arc4random() % 4;
-            
+            int direction = arc4random() % 4; //pick a direction
             fbxPosition = GLKVector3Make(RoundTo(fbxPosition.x, 0.5), fbxPosition.y, RoundTo(fbxPosition.z , 0.5));
             
             switch(direction)
             {
-                case 0:
+                case 0://North
                 {
                     fbxOrientation = 270 * M_PI / 180;
-                    if(![mazeLevel GetCellAt:(fbxPosition.x * 2) And:(fbxPosition.z * 2)][0])//North
+                    if(![mazeLevel GetCellAt:(fbxPosition.x * 2) And:(fbxPosition.z * 2)][0])//if North not present
                     {
-                            heading = GLKVector3Make(-0.005, 0, 0);
-                            fbxPosition = fbxTarget;
-                            fbxTarget = GLKVector3Make(fbxPosition.x - 0.5, fbxPosition.y, fbxPosition.z);
+                        //head in that direction
+                        heading = GLKVector3Make(-0.005, 0, 0);
+                        fbxPosition = fbxTarget;
+                        fbxTarget = GLKVector3Make(fbxPosition.x - 0.5, fbxPosition.y, fbxPosition.z);
                     }
                     else
                     {
+                        //wait, so you can choose again
                         heading = GLKVector3Make(0, 0, 0);
                         fbxPosition = fbxTarget;
                         fbxTarget = GLKVector3Make(fbxPosition.x, fbxPosition.y, fbxPosition.z);
                     }
                     break;
                 }
-                case 1:
+                case 1://south
                 {
                     fbxOrientation = 90 * M_PI / 180;
-                    if(![mazeLevel GetCellAt:(fbxPosition.x * 2) And:(fbxPosition.z * 2)][1])//south
+                    if(![mazeLevel GetCellAt:(fbxPosition.x * 2) And:(fbxPosition.z * 2)][1])//if south not present
                     {
+                        //head in that direction
                         heading = GLKVector3Make(0.005, 0, 0);
                         fbxPosition = fbxTarget;
                         fbxTarget = GLKVector3Make(fbxPosition.x + 0.5, fbxPosition.y, fbxPosition.z);
                     }
                     else
                     {
+                        //wait, so you can choose again
                         heading = GLKVector3Make(0, 0, 0);
                         fbxPosition = fbxTarget;
                         fbxTarget = GLKVector3Make(fbxPosition.x, fbxPosition.y, fbxPosition.z);
                     }
                     break;
                 }
-                case 2:
+                case 2://west
                 {
                     fbxOrientation = 180 * M_PI / 180;
-                    if(![mazeLevel GetCellAt:(fbxPosition.x * 2) And:(fbxPosition.z * 2)][2])//west
+                    if(![mazeLevel GetCellAt:(fbxPosition.x * 2) And:(fbxPosition.z * 2)][2])//if west not present
                     {
+                        //head in that direction
                         heading = GLKVector3Make(0, 0, -0.005);
                         fbxPosition = fbxTarget;
                         fbxTarget = GLKVector3Make(fbxPosition.x, fbxPosition.y, fbxPosition.z - 0.5);
                     }
                     else
                     {
+                        //wait, so you can choose again
                         heading = GLKVector3Make(0, 0, 0);
                         fbxPosition = fbxTarget;
                         fbxTarget = GLKVector3Make(fbxPosition.x, fbxPosition.y, fbxPosition.z);
@@ -1044,17 +1051,19 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
                     }
                     break;
                 }
-                case 3:
+                case 3://east
                 {
                     fbxOrientation = 0 * M_PI / 180;
-                    if(![mazeLevel GetCellAt:(fbxPosition.x * 2) And:(fbxPosition.z * 2)][3])//east
+                    if(![mazeLevel GetCellAt:(fbxPosition.x * 2) And:(fbxPosition.z * 2)][3])//if east not present
                     {
+                        //head in that direction
                         heading = GLKVector3Make(0, 0, 0.005);
                         fbxPosition = fbxTarget;
                         fbxTarget = GLKVector3Make(fbxPosition.x, fbxPosition.y, fbxPosition.z + 0.5);
                     }
                     else
                     {
+                        //wait, so you can choose again
                         heading = GLKVector3Make(0, 0, 0);
                         fbxPosition = fbxTarget;
                         fbxTarget = GLKVector3Make(fbxPosition.x, fbxPosition.y, fbxPosition.z);
@@ -1063,6 +1072,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
                 }
             }
             
+            // Kep the ai in bounds
             if(fbxTarget.x > (mazeLevel.GetWidth - 1) * 0.5)
             {
                 fbxTarget.x = (mazeLevel.GetWidth - 1) * 0.5;
@@ -1088,18 +1098,19 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
             }
             
         }
+        // move the fbx
         fbxPosition = GLKVector3Make(fbxPosition.x + heading.x, fbxPosition.y + heading.y, fbxPosition.z + heading.z);
     }
     
+    //update the rotation of the constantly rotating cube
     cubeYRot += 0.005f;
+    
     // Set up base model view matrix (place camera)
     GLKMatrix4 baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, 0.0f);
     baseModelViewMatrix = GLKMatrix4Rotate(baseModelViewMatrix, _rotation, 0.0f, 1.0f, 0.0f);
     
     // Set up model view matrix (place model in world)
     _modelViewMatrix = GLKMatrix4Identity;
-
-    //_modelViewMatrix = GLKMatrix4Rotate(_modelViewMatrix, xRot, 1.0f, 0.0f, 0.0f);
     _modelViewMatrix = GLKMatrix4Rotate(_modelViewMatrix, _rotEnd.x, 0.0f, 1.0f, 0.0f);
     _modelViewMatrix = GLKMatrix4Rotate(_modelViewMatrix, _rotation, 0.0f, 1.0f, 0.0f);
     _modelViewMatrix = GLKMatrix4Translate(_modelViewMatrix, _transEnd.x, 0.0f, _transEnd.y);
@@ -1114,29 +1125,33 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     
     _modelViewProjectionMatrix = GLKMatrix4Multiply(projectionMatrix, _modelViewMatrix);
     
+    //Set up the cube modelview matrix
     _cubeMVMatrix = GLKMatrix4Identity;
     _cubeMVMatrix = GLKMatrix4Rotate(_cubeMVMatrix, _rotEnd.x, 0.0f, 1.0f, 0.0f);
     _cubeMVMatrix = GLKMatrix4Translate(_cubeMVMatrix, _transEnd.x, 0.0f, _transEnd.y);
     _cubeMVMatrix = GLKMatrix4Rotate(_cubeMVMatrix, cubeYRot, 0.0f, 1.0f, 0.0f);
-
     _cubeMVMatrix = GLKMatrix4Multiply(baseModelViewMatrix, _cubeMVMatrix);
     
+    //set up the cube normal matrix
     _cubeNormalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(_cubeMVMatrix), NULL);
+    
+    //set up the cube model view projection matrix
     _cubeMVPMatrix = GLKMatrix4Multiply(projectionMatrix, _cubeMVMatrix);
     
+    //Set up the fbx modelview matrix
     _fbxMVMatrix = GLKMatrix4Identity;
-    //_fbxMVMatrix = GLKMatrix4Translate(_fbxMVMatrix, _transEnd.x, 0.0f, _transEnd.y);
     _fbxMVMatrix = GLKMatrix4Translate(_fbxMVMatrix, -_fbxTransEnd.x, _fbxTransEnd.y, _fbxZTransEnd.y);
     _fbxMVMatrix = GLKMatrix4Translate(_fbxMVMatrix, fbxPosition.x, fbxPosition.y, fbxPosition.z);
     _fbxMVMatrix = GLKMatrix4Scale(_fbxMVMatrix, _fbxScale, _fbxScale, _fbxScale);
     _fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, fbxOrientation, 0.0f, 1.0f, 0.0f);
     _fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, _fbxRotEnd.x, 0.0f, 1.0f, 0.0f);
     _fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, -_fbxRotEnd.y, 1.0f, 0.0f, 0.0f);
-    //_fbxMVMatrix = GLKMatrix4Rotate(_fbxMVMatrix, _rotation, 0.0f, 1.0f, 0.0f);
-
     _fbxMVMatrix = GLKMatrix4Multiply(_modelViewMatrix, _fbxMVMatrix);
     
+    //set up the fbx normal matrix
     _fbxNormalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(_fbxMVMatrix), NULL);
+    
+    //set up the fbx model view projection matrix
     _fbxMVPMatrix = GLKMatrix4Multiply(projectionMatrix, _fbxMVMatrix);
 }
 
@@ -1161,7 +1176,6 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _cubeMVPMatrix.m);
     glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, _cubeNormalMatrix.m);
     glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_MATRIX], 1, 0, _cubeMVMatrix.m);
-    /* set lighting parameters... */
     glUniform3fv(uniforms[UNIFORM_FLASHLIGHT_POSITION], 1, flashlightPosition.v);
     glUniform3fv(uniforms[UNIFORM_DIFFUSE_LIGHT_POSITION], 1, diffuseLightPosition.v);
     glUniform4fv(uniforms[UNIFORM_DIFFUSE_COMPONENT], 1, diffuseComponent.v);
@@ -1188,6 +1202,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     glUniform1i(uniforms[UNIFORM_TEXTURE], 0);
     
     // Select VBO and draw
+    //Draw the cube
     glBindVertexArrayOES(_vertexArray);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
     glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
@@ -1202,17 +1217,13 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     
     glBindTexture(GL_TEXTURE_2D, fbxTexture);
     glUniform1i(uniforms[UNIFORM_TEXTURE], 0);
-    
     glBindVertexArrayOES(_fbxVertArray);
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _fbxIndexBuffer);
-    //glDrawElements(GL_TRIANGLES, fbxRender.numIndices, GL_UNSIGNED_INT, 0);
     glDrawArrays(GL_TRIANGLES, 0, fbxRender.numVertices);
     
     // Set up uniforms
     glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _modelViewProjectionMatrix.m);
     glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, _normalMatrix.m);
     glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_MATRIX], 1, 0, _modelViewMatrix.m);
-    /* set lighting parameters... */
     glUniform3fv(uniforms[UNIFORM_FLASHLIGHT_POSITION], 1, flashlightPosition.v);
     glUniform3fv(uniforms[UNIFORM_DIFFUSE_LIGHT_POSITION], 1, diffuseLightPosition.v);
     glUniform4fv(uniforms[UNIFORM_DIFFUSE_COMPONENT], 1, diffuseComponent.v);
@@ -1247,7 +1258,7 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _floorIndexBuffer);
             glDrawElements(GL_TRIANGLES, floorNumIndices, GL_UNSIGNED_INT, 0);
             
-            if([mazeLevel GetCellAt:x And:y][0])
+            if([mazeLevel GetCellAt:x And:y][0]) // North walls
             {
                 if([mazeLevel GetCellAt:x And:y][2])
                 {
@@ -1275,7 +1286,8 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
                 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _northIndexBuffer);
                 glDrawElements(GL_TRIANGLES, northNumIndices, GL_UNSIGNED_INT, 0);
             }
-            if([mazeLevel GetCellAt:x And:y][1])
+            
+            if([mazeLevel GetCellAt:x And:y][1]) //south walls
             {
                 if([mazeLevel GetCellAt:x And:y][3])
                 {
@@ -1301,7 +1313,8 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
                 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _southIndexBuffer);
                 glDrawElements(GL_TRIANGLES, southNumIndices, GL_UNSIGNED_INT, 0);
             }
-            if([mazeLevel GetCellAt:x And:y][2])
+            
+            if([mazeLevel GetCellAt:x And:y][2]) //west walls
             {
                 if([mazeLevel GetCellAt:x And:y][1])
                 {
@@ -1327,7 +1340,8 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
                 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _westIndexBuffer);
                 glDrawElements(GL_TRIANGLES, westNumIndices, GL_UNSIGNED_INT, 0);
             }
-            if([mazeLevel GetCellAt:x And:y][3])
+            
+            if([mazeLevel GetCellAt:x And:y][3]) //East walls
             {
                 if([mazeLevel GetCellAt:x And:y][0])
                 {
@@ -1356,15 +1370,13 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
         }
     }
     
+    //Render the minimap
     if(consoleMap)
     {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_BLEND);
-        //_MiniMap.text = [mazeLevel GetMap];
-        //_MiniMap.hidden = NO;
         GLKMatrix4 mapRot = GLKMatrix4Rotate(GLKMatrix4Identity, M_PI / 2.0f, 1.0, 0.0, 0.0);
         //render minimap
-        // Set up uniforms
         glUseProgram(_mmProgram);
         
         //draw player
@@ -1399,7 +1411,6 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
         glUniform1i(mmUniforms[MM_UNIFORM_X_INDEX], 0);
         glUniform1i(mmUniforms[MM_UNIFORM_Y_INDEX], 0);
         glUniformMatrix4fv(mmUniforms[MM_UNIFORM_ORIENT], 1, 0, GLKMatrix4Rotate(GLKMatrix4Identity, 0.0, 0.0, 0.0, 1.0).m);
-
         
         //Draw Maze
         for(int x = 0; x < [mazeLevel GetWidth]; x++)
@@ -1441,8 +1452,6 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
             }
         }
         glDisable(GL_BLEND);
-        
-
     }
     else
     {
@@ -1482,7 +1491,6 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     glAttachShader(_program, fragShader);
     
     // Bind attribute locations.
-    // This needs to be done prior to linking.
     glBindAttribLocation(_program, GLKVertexAttribPosition, "position");
     glBindAttribLocation(_program, GLKVertexAttribNormal, "normal");
     glBindAttribLocation(_program, GLKVertexAttribTexCoord0, "texCoordIn");
@@ -1660,8 +1668,6 @@ GLint mmUniforms[MM_NUM_UNIFORMS];
     return YES;
 }
 
-
-
 #pragma mark - Utility functions
 
 // Load in and set up texture image (adapted from Ray Wenderlich)
@@ -1702,20 +1708,15 @@ int generatePlayer(float scale, GLfloat **vertices, GLfloat **normals,
     int i;
     int numVertices = 4;
     int numIndices = 6;
-    GLfloat floorVerts[] =
+    GLfloat playerVerts[] =
     {
         -0.0f, -0.5f, 0.25f,
         -0.25f, -0.5f,  -0.25f,
         0.25f, -0.5f,  -0.25f,
         0.0f, -0.5f, -0.25f,
-        
-        //-0.5f, -0.5f, -0.5f,
-        //-0.5f, -0.5f,  0.5f,
-        //0.5f, -0.5f,  0.5f,
-        //0.5f, -0.5f, -0.5f,
     };
     
-    GLfloat floorNormals[] =
+    GLfloat playerNormals[] =
     {
         0.0f, 1.0f, 0.0f,
         0.0f, 1.0f, 0.0f,
@@ -1723,24 +1724,20 @@ int generatePlayer(float scale, GLfloat **vertices, GLfloat **normals,
         0.0f, 1.0f, 0.0f,
     };
     
-    GLfloat floorTex[] =
+    GLfloat playerTex[] =
     {
-        /*
-         0.0f, 0.0f,
-         0.0f, 1.0f,
-         1.0f, 1.0f,
-         1.0f, 0.0f,*/
         1.0f, 1.0f,
         1.0f, 0.0f,
         0.0f, 0.0f,
         0.0f, 1.0f,
         
     };
+    
     // Allocate memory for buffers
     if ( vertices != NULL )
     {
         *vertices = (float*)malloc ( sizeof ( GLfloat ) * 3 * numVertices );
-        memcpy ( *vertices, floorVerts, sizeof ( floorVerts ) );
+        memcpy ( *vertices, playerVerts, sizeof ( playerVerts ) );
         
         for ( i = 0; i < numVertices * 3; i++ )
         {
@@ -1751,13 +1748,13 @@ int generatePlayer(float scale, GLfloat **vertices, GLfloat **normals,
     if ( normals != NULL )
     {
         *normals = (float*)malloc ( sizeof ( GLfloat ) * 3 * numVertices );
-        memcpy ( *normals, floorNormals, sizeof ( floorNormals ) );
+        memcpy ( *normals, playerNormals, sizeof ( playerNormals ) );
     }
     
     if ( texCoords != NULL )
     {
         *texCoords = (float*)malloc ( sizeof ( GLfloat ) * 2 * numVertices );
-        memcpy ( *texCoords, floorTex, sizeof ( floorTex ) ) ;
+        memcpy ( *texCoords, playerTex, sizeof ( playerTex ) ) ;
     }
     
     
@@ -1786,20 +1783,15 @@ int generateEnemy(float scale, GLfloat **vertices, GLfloat **normals,
     int i;
     int numVertices = 4;
     int numIndices = 6;
-    GLfloat floorVerts[] =
+    GLfloat enemyVerts[] =
     {
         -0.0f, -0.5f, 0.25f,
         -0.25f, -0.5f,  -0.0f,
         0.25f, -0.5f,  -0.0f,
         0.0f, -0.5f, -0.25f,
-        
-        //-0.5f, -0.5f, -0.5f,
-        //-0.5f, -0.5f,  0.5f,
-        //0.5f, -0.5f,  0.5f,
-        //0.5f, -0.5f, -0.5f,
     };
     
-    GLfloat floorNormals[] =
+    GLfloat enemyNormals[] =
     {
         0.0f, 1.0f, 0.0f,
         0.0f, 1.0f, 0.0f,
@@ -1807,13 +1799,8 @@ int generateEnemy(float scale, GLfloat **vertices, GLfloat **normals,
         0.0f, 1.0f, 0.0f,
     };
     
-    GLfloat floorTex[] =
+    GLfloat enemyTex[] =
     {
-        /*
-         0.0f, 0.0f,
-         0.0f, 1.0f,
-         1.0f, 1.0f,
-         1.0f, 0.0f,*/
         1.0f, 1.0f,
         1.0f, 0.0f,
         0.0f, 0.0f,
@@ -1824,7 +1811,7 @@ int generateEnemy(float scale, GLfloat **vertices, GLfloat **normals,
     if ( vertices != NULL )
     {
         *vertices = (float*)malloc ( sizeof ( GLfloat ) * 3 * numVertices );
-        memcpy ( *vertices, floorVerts, sizeof ( floorVerts ) );
+        memcpy ( *vertices, enemyVerts, sizeof ( enemyVerts ) );
         
         for ( i = 0; i < numVertices * 3; i++ )
         {
@@ -1835,15 +1822,14 @@ int generateEnemy(float scale, GLfloat **vertices, GLfloat **normals,
     if ( normals != NULL )
     {
         *normals = (float*)malloc ( sizeof ( GLfloat ) * 3 * numVertices );
-        memcpy ( *normals, floorNormals, sizeof ( floorNormals ) );
+        memcpy ( *normals, enemyNormals, sizeof ( enemyNormals ) );
     }
     
     if ( texCoords != NULL )
     {
         *texCoords = (float*)malloc ( sizeof ( GLfloat ) * 2 * numVertices );
-        memcpy ( *texCoords, floorTex, sizeof ( floorTex ) ) ;
+        memcpy ( *texCoords, enemyTex, sizeof ( enemyTex ) ) ;
     }
-    
     
     // Generate the indices
     if ( indices != NULL )
@@ -1862,8 +1848,6 @@ int generateEnemy(float scale, GLfloat **vertices, GLfloat **normals,
         *numVerts = numVertices;
     return numIndices;
 }
-
-
 
 int generateFloor(float scale, GLfloat **vertices, GLfloat **normals,
                   GLfloat **texCoords, GLuint **indices, int *numVerts)
@@ -1890,17 +1874,13 @@ int generateFloor(float scale, GLfloat **vertices, GLfloat **normals,
     
     GLfloat floorTex[] =
     {
-        /*
-        0.0f, 0.0f,
-        0.0f, 1.0f,
-        1.0f, 1.0f,
-        1.0f, 0.0f,*/
         1.0f, 1.0f,
         1.0f, 0.0f,
         0.0f, 0.0f,
         0.0f, 1.0f,
 
     };
+    
     // Allocate memory for buffers
     if ( vertices != NULL )
     {
@@ -1931,14 +1911,8 @@ int generateFloor(float scale, GLfloat **vertices, GLfloat **normals,
     {
         GLuint cubeIndices[] =
         {
-            //0, 2, 1,
-            //0, 3, 2,
-            
             0,1,2,
             0,2,3,
-            
-  //          4, 5, 6,
-//            4, 6, 7,
         };
         
         *indices = (GLuint*)malloc ( sizeof ( GLuint ) * numIndices );
@@ -1975,11 +1949,6 @@ int generateCeiling(float scale, GLfloat **vertices, GLfloat **normals,
     
     GLfloat ceilingTex[] =
     {
-        /*
-        1.0f, 0.0f,
-        1.0f, 1.0f,
-        0.0f, 1.0f,
-        0.0f, 0.0f,*/
         1.0f, 1.0f,
         1.0f, 0.0f,
         0.0f, 0.0f,
@@ -2010,7 +1979,6 @@ int generateCeiling(float scale, GLfloat **vertices, GLfloat **normals,
         memcpy ( *texCoords, ceilingTex, sizeof ( ceilingTex ) ) ;
     }
     
-    
     // Generate the indices
     if ( indices != NULL )
     {
@@ -2035,7 +2003,7 @@ int generateWestWall(float scale, GLfloat **vertices, GLfloat **normals,
     int i;
     int numVertices = 4;
     int numIndices = 6;
-    GLfloat northVerts[] =
+    GLfloat westVerts[] =
     {
         -0.5f, -0.5f, -0.5f,
         -0.5f,  0.5f, -0.5f,
@@ -2043,7 +2011,7 @@ int generateWestWall(float scale, GLfloat **vertices, GLfloat **normals,
         0.5f, -0.5f, -0.5f,
     };
     
-    GLfloat northNormals[] =
+    GLfloat westNormals[] =
     {
         0.0f, 0.0f, 1.0f,
         0.0f, 0.0f, 1.0f,
@@ -2053,13 +2021,154 @@ int generateWestWall(float scale, GLfloat **vertices, GLfloat **normals,
         
     };
     
-    GLfloat northTex[] =
+    GLfloat westTex[] =
     {
-        /*
+        1.0f, 1.0f,
+        1.0f, 0.0f,
         0.0f, 0.0f,
         0.0f, 1.0f,
+
+    };
+    // Allocate memory for buffers
+    if ( vertices != NULL )
+    {
+        *vertices = (float*)malloc ( sizeof ( GLfloat ) * 3 * numVertices );
+        memcpy ( *vertices, westVerts, sizeof ( westVerts ) );
+        
+        for ( i = 0; i < numVertices * 3; i++ )
+        {
+            ( *vertices ) [i] *= scale;
+        }
+    }
+    
+    if ( normals != NULL )
+    {
+        *normals = (float*)malloc ( sizeof ( GLfloat ) * 3 * numVertices );
+        memcpy ( *normals, westNormals, sizeof ( westNormals ) );
+    }
+    
+    if ( texCoords != NULL )
+    {
+        *texCoords = (float*)malloc ( sizeof ( GLfloat ) * 2 * numVertices );
+        memcpy ( *texCoords, westTex, sizeof ( westTex ) ) ;
+    }
+    
+    // Generate the indices
+    if ( indices != NULL )
+    {
+        GLuint cubeIndices[] =
+        {
+            0, 2, 1,
+            0, 3, 2,
+        };
+        
+        *indices = (GLuint*)malloc ( sizeof ( GLuint ) * numIndices );
+        memcpy ( *indices, cubeIndices, sizeof ( cubeIndices ) );
+    }
+    
+    if (numVerts != NULL)
+        *numVerts = numVertices;
+    return numIndices;
+}
+
+int generateEastWall(float scale, GLfloat **vertices, GLfloat **normals,
+                      GLfloat **texCoords, GLuint **indices, int *numVerts)
+{
+    int i;
+    int numVertices = 4;
+    int numIndices = 6;
+    GLfloat eastVerts[] =
+    {
+        -0.5f, -0.5f, 0.5f,
+        -0.5f,  0.5f, 0.5f,
+        0.5f,  0.5f, 0.5f,
+        0.5f, -0.5f, 0.5f,
+    };
+    
+    GLfloat eastNormals[] =
+    {
+        0.0f, 0.0f, -1.0f,
+        0.0f, 0.0f, -1.0f,
+        0.0f, 0.0f, -1.0f,
+        0.0f, 0.0f, -1.0f,
+
+    };
+    
+    GLfloat eastTex[] =
+    {
         1.0f, 1.0f,
-        1.0f, 0.0f,*/
+        1.0f, 0.0f,
+        0.0f, 0.0f,
+        0.0f, 1.0f,
+
+    };
+    // Allocate memory for buffers
+    if ( vertices != NULL )
+    {
+        *vertices = (float*)malloc ( sizeof ( GLfloat ) * 3 * numVertices );
+        memcpy ( *vertices, eastVerts, sizeof ( eastVerts ) );
+        
+        for ( i = 0; i < numVertices * 3; i++ )
+        {
+            ( *vertices ) [i] *= scale;
+        }
+    }
+    
+    if ( normals != NULL )
+    {
+        *normals = (float*)malloc ( sizeof ( GLfloat ) * 3 * numVertices );
+        memcpy ( *normals, eastNormals, sizeof ( eastNormals ) );
+    }
+    
+    if ( texCoords != NULL )
+    {
+        *texCoords = (float*)malloc ( sizeof ( GLfloat ) * 2 * numVertices );
+        memcpy ( *texCoords, eastTex, sizeof ( eastTex ) ) ;
+    }
+    
+    // Generate the indices
+    if ( indices != NULL )
+    {
+        GLuint cubeIndices[] =
+        {
+            0,1,2,
+            0,2,3,
+        };
+        
+        *indices = (GLuint*)malloc ( sizeof ( GLuint ) * numIndices );
+        memcpy ( *indices, cubeIndices, sizeof ( cubeIndices ) );
+    }
+    
+    if (numVerts != NULL)
+        *numVerts = numVertices;
+    return numIndices;
+}
+
+int generateNorthWall(float scale, GLfloat **vertices, GLfloat **normals,
+                     GLfloat **texCoords, GLuint **indices, int *numVerts)
+{
+    int i;
+    int numVertices = 4;
+    int numIndices = 6;
+    GLfloat northVerts[] =
+    {
+        -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f, -0.5f,
+    };
+    
+    GLfloat northNormals[] =
+    {
+        1.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 0.0f,
+
+    };
+    
+    GLfloat northTex[] =
+    {
         1.0f, 1.0f,
         1.0f, 0.0f,
         0.0f, 0.0f,
@@ -2098,8 +2207,6 @@ int generateWestWall(float scale, GLfloat **vertices, GLfloat **normals,
         {
             0, 2, 1,
             0, 3, 2,
-            //0,1,2,
-            //0,2,3,
         };
         
         *indices = (GLuint*)malloc ( sizeof ( GLuint ) * numIndices );
@@ -2111,42 +2218,37 @@ int generateWestWall(float scale, GLfloat **vertices, GLfloat **normals,
     return numIndices;
 }
 
-int generateEastWall(float scale, GLfloat **vertices, GLfloat **normals,
-                      GLfloat **texCoords, GLuint **indices, int *numVerts)
+int generateSouthWall(float scale, GLfloat **vertices, GLfloat **normals,
+                     GLfloat **texCoords, GLuint **indices, int *numVerts)
 {
     int i;
     int numVertices = 4;
     int numIndices = 6;
+    
     GLfloat southVerts[] =
     {
-        -0.5f, -0.5f, 0.5f,
-        -0.5f,  0.5f, 0.5f,
-        0.5f,  0.5f, 0.5f,
-        0.5f, -0.5f, 0.5f,
+        0.5f, -0.5f, -0.5f,
+        0.5f, -0.5f,  0.5f,
+        0.5f,  0.5f,  0.5f,
+        0.5f,  0.5f, -0.5f,
     };
     
     GLfloat southNormals[] =
     {
-        0.0f, 0.0f, -1.0f,
-        0.0f, 0.0f, -1.0f,
-        0.0f, 0.0f, -1.0f,
-        0.0f, 0.0f, -1.0f,
-
+        -1.0f, 0.0f, 0.0f,
+        -1.0f, 0.0f, 0.0f,
+        -1.0f, 0.0f, 0.0f,
+        -1.0f, 0.0f, 0.0f,
     };
     
     GLfloat southTex[] =
     {
-        /*
-        0.0f, 0.0f,
-        0.0f, 1.0f,
-        1.0f, 1.0f,
-        1.0f, 0.0f,*/
         1.0f, 1.0f,
         1.0f, 0.0f,
         0.0f, 0.0f,
         0.0f, 1.0f,
-
     };
+    
     // Allocate memory for buffers
     if ( vertices != NULL )
     {
@@ -2171,14 +2273,11 @@ int generateEastWall(float scale, GLfloat **vertices, GLfloat **normals,
         memcpy ( *texCoords, southTex, sizeof ( southTex ) ) ;
     }
     
-    
     // Generate the indices
     if ( indices != NULL )
     {
         GLuint cubeIndices[] =
         {
-//            0, 2, 1,
-//            0, 3, 2,
             0,1,2,
             0,2,3,
         };
@@ -2191,170 +2290,6 @@ int generateEastWall(float scale, GLfloat **vertices, GLfloat **normals,
         *numVerts = numVertices;
     return numIndices;
 }
-
-int generateNorthWall(float scale, GLfloat **vertices, GLfloat **normals,
-                     GLfloat **texCoords, GLuint **indices, int *numVerts)
-{
-    int i;
-    int numVertices = 4;
-    int numIndices = 6;
-    GLfloat westVerts[] =
-    {
-        -0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f, -0.5f,
-    };
-    
-    GLfloat westNormals[] =
-    {
-        1.0f, 0.0f, 0.0f,
-        1.0f, 0.0f, 0.0f,
-        1.0f, 0.0f, 0.0f,
-        1.0f, 0.0f, 0.0f,
-
-    };
-    
-    GLfloat westTex[] =
-    {
-        /*
-        0.0f, 0.0f,
-        0.0f, 1.0f,
-        1.0f, 1.0f,
-        1.0f, 0.0f,*/
-        1.0f, 1.0f,
-        1.0f, 0.0f,
-        0.0f, 0.0f,
-        0.0f, 1.0f,
-
-    };
-    // Allocate memory for buffers
-    if ( vertices != NULL )
-    {
-        *vertices = (float*)malloc ( sizeof ( GLfloat ) * 3 * numVertices );
-        memcpy ( *vertices, westVerts, sizeof ( westVerts ) );
-        
-        for ( i = 0; i < numVertices * 3; i++ )
-        {
-            ( *vertices ) [i] *= scale;
-        }
-    }
-    
-    if ( normals != NULL )
-    {
-        *normals = (float*)malloc ( sizeof ( GLfloat ) * 3 * numVertices );
-        memcpy ( *normals, westNormals, sizeof ( westNormals ) );
-    }
-    
-    if ( texCoords != NULL )
-    {
-        *texCoords = (float*)malloc ( sizeof ( GLfloat ) * 2 * numVertices );
-        memcpy ( *texCoords, westTex, sizeof ( westTex ) ) ;
-    }
-    
-    
-    // Generate the indices
-    if ( indices != NULL )
-    {
-        GLuint cubeIndices[] =
-        {
-            0, 2, 1,
-            0, 3, 2,
-        };
-        
-        *indices = (GLuint*)malloc ( sizeof ( GLuint ) * numIndices );
-        memcpy ( *indices, cubeIndices, sizeof ( cubeIndices ) );
-    }
-    
-    if (numVerts != NULL)
-        *numVerts = numVertices;
-    return numIndices;
-}
-
-int generateSouthWall(float scale, GLfloat **vertices, GLfloat **normals,
-                     GLfloat **texCoords, GLuint **indices, int *numVerts)
-{
-    int i;
-    int numVertices = 4;
-    int numIndices = 6;
-    
-    GLfloat eastVerts[] =
-    {
-        0.5f, -0.5f, -0.5f,
-        0.5f, -0.5f,  0.5f,
-        0.5f,  0.5f,  0.5f,
-        0.5f,  0.5f, -0.5f,
-    };
-    
-    GLfloat eastNormals[] =
-    {
-        -1.0f, 0.0f, 0.0f,
-        -1.0f, 0.0f, 0.0f,
-        -1.0f, 0.0f, 0.0f,
-        -1.0f, 0.0f, 0.0f,
-    };
-    
-    GLfloat eastTex[] =
-    {
-        /*
-        0.0f, 0.0f,
-        0.0f, 1.0f,
-        1.0f, 1.0f,
-        1.0f, 0.0f,*/
-        1.0f, 1.0f,
-        1.0f, 0.0f,
-        0.0f, 0.0f,
-        0.0f, 1.0f,
-    };
-    
-    // Allocate memory for buffers
-    if ( vertices != NULL )
-    {
-        *vertices = (float*)malloc ( sizeof ( GLfloat ) * 3 * numVertices );
-        memcpy ( *vertices, eastVerts, sizeof ( eastVerts ) );
-        
-        for ( i = 0; i < numVertices * 3; i++ )
-        {
-            ( *vertices ) [i] *= scale;
-        }
-    }
-    
-    if ( normals != NULL )
-    {
-        *normals = (float*)malloc ( sizeof ( GLfloat ) * 3 * numVertices );
-        memcpy ( *normals, eastNormals, sizeof ( eastNormals ) );
-    }
-    
-    if ( texCoords != NULL )
-    {
-        *texCoords = (float*)malloc ( sizeof ( GLfloat ) * 2 * numVertices );
-        memcpy ( *texCoords, eastTex, sizeof ( eastTex ) ) ;
-    }
-    
-    
-    // Generate the indices
-    if ( indices != NULL )
-    {
-        GLuint cubeIndices[] =
-        {
-//            0, 2, 1,
-//            0, 3, 2,
-            0,1,2,
-            0,2,3,
-        };
-        
-        *indices = (GLuint*)malloc ( sizeof ( GLuint ) * numIndices );
-        memcpy ( *indices, cubeIndices, sizeof ( cubeIndices ) );
-    }
-    
-    if (numVerts != NULL)
-        *numVerts = numVertices;
-    return numIndices;
-}
-
-
-
-
 
 // Generate vertices, normals, texture coordinates and indices for cube
 //      Adapted from Dan Ginsburg, Budirijanto Purnomo from the book
@@ -2599,13 +2534,15 @@ int generateSphere(int numSlices, float radius, GLfloat **vertices, GLfloat **no
     return numIndices;
 }
 
-// >>>
-
-- (IBAction)ToggleDayNight:(id)sender {
+//Changes from day to night
+- (IBAction)ToggleDayNight:(id)sender
+{
     isDay = !isDay;
 }
 
-- (IBAction)FlashLightToggle:(id)sender {
+//Toggles the flashlight
+- (IBAction)FlashLightToggle:(id)sender
+{
     if(isFlashLightOn == 0)
     {
         isFlashLightOn = 1;
@@ -2616,7 +2553,9 @@ int generateSphere(int numSlices, float radius, GLfloat **vertices, GLfloat **no
     }
 }
 
-- (IBAction)FogToggle:(id)sender {
+//Toggles the fog
+- (IBAction)FogToggle:(id)sender
+{
     if(isFogOn == 0)
     {
         isFogOn = 1;
@@ -2627,6 +2566,7 @@ int generateSphere(int numSlices, float radius, GLfloat **vertices, GLfloat **no
     }
 }
 
+//Toggles the movement and rotation
 - (IBAction)FBXMoveToggle:(id)sender
 {
     fbxMovementToggle = !fbxMovementToggle;
@@ -2637,6 +2577,7 @@ int generateSphere(int numSlices, float radius, GLfloat **vertices, GLfloat **no
         [_FBXRotationMovementToggleLabel setText:@"FBX Rotation Selected"];
 }
 
+//Toggles the z movement
 - (IBAction)FBXZMovementToggle:(id)sender
 {
     fbxZToggle = !fbxZToggle;
@@ -2648,7 +2589,9 @@ int generateSphere(int numSlices, float radius, GLfloat **vertices, GLfloat **no
 
 }
 
-- (IBAction)ResetEnemy:(id)sender {
+//Resets the enemy
+- (IBAction)ResetEnemy:(id)sender
+{
     _fbxTransEnd = GLKVector2Make(0.0f, 0.0f);
     _fbxZTransEnd = GLKVector2Make(0.0f, 0.0f);
     _fbxRotEnd = GLKVector2Make(0.0f, 0.0f);
@@ -2658,6 +2601,7 @@ int generateSphere(int numSlices, float radius, GLfloat **vertices, GLfloat **no
     _fbxScale = 0.1f;
 }
 
+//Initalize the fbx
 - (void)InitializeFBX
 {
     // Prepare the FBX SDK.
@@ -2667,12 +2611,14 @@ int generateSphere(int numSlices, float radius, GLfloat **vertices, GLfloat **no
     [self LoadFBXScene:modelFileName];
 }
 
+//cleans up the fbx
 - (void)CleanupFBX
 {
     bool bResult ;
     DestroySdkObjects (_sdkManager, bResult) ;
 }
 
+//loads the fbx scene
 - (BOOL)LoadFBXScene:(NSString *)filename
 {
     FbxString fbxSt([filename cStringUsingEncoding:[NSString defaultCStringEncoding]]) ;
@@ -2691,6 +2637,7 @@ int generateSphere(int numSlices, float radius, GLfloat **vertices, GLfloat **no
     return TRUE;
 }
 
+//rounds to a specific number
 float RoundTo(float number, float to)
 {
     if (number >= 0) {
